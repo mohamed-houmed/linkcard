@@ -1,0 +1,265 @@
+{
+  "navbar": {
+    "features": "Features",
+    "howItWorks": "How It Works",
+    "examples": "Examples",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "login": "Log in",
+    "signup": "Sign Up Free",
+    "language": "Language",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "homeAriaLabel": "LinkCard homepage"
+  },
+
+  "hero": {
+    "badge": "Your professional identity. One smart link.",
+    "title": "The smart way to share",
+    "titleHighlight": "who you are.",
+    "description": "LinkCard brings your contact details, professional identity, social media and expertise together in one beautiful digital profile.",
+
+    "advantages": {
+      "smartLink": {
+        "title": "One Smart Link",
+        "description": "Share everything with one tap."
+      },
+      "modern": {
+        "title": "Smart & Modern",
+        "description": "Create a profile that stands out."
+      },
+      "updated": {
+        "title": "Always Updated",
+        "description": "Edit once and update everywhere."
+      }
+    },
+
+    "primaryButton": "Get Started Free",
+    "secondaryButton": "View Example Profile",
+
+    "socialProof": "Join professionals already using LinkCard",
+
+    "benefits": {
+      "noCreditCard": "No credit card required",
+      "freeProfile": "Free profile",
+      "updateAnytime": "Update anytime"
+    }
+  },
+
+  "heroPhone": {
+    "coverSubtitle": "Your professional identity",
+    "coverTitle": "One smart link",
+
+    "jobTitle": "Operations Engineer",
+    "professionalSubtitle": "Telecom · AI Entrepreneur",
+    "location": "Djibouti City, Djibouti",
+
+    "actions": {
+      "call": "Call",
+      "email": "Email",
+      "save": "Save"
+    },
+
+    "profileButton": "View My Profile",
+
+    "aboutTitle": "About Me",
+
+    "aboutDescription": "Building reliable telecom infrastructure and creating digital solutions that help professionals connect and grow.",
+
+    "socialMediaTitle": "Social Media"
+  },
+
+  "heroQRCard": {
+    "scan": "Scan or tap",
+    "connect": "to connect instantly",
+    "nfc": "NFC Enabled"
+  },
+
+    "trustedCompanies": {
+    "title": "Trusted by professionals and businesses"
+  },
+
+  "howItWorks": {
+    "badge": "Easy Steps",
+    "title": "How LinkCard Works",
+    "subtitle": "Create. Share. Grow.",
+    "steps": {
+      "create": {
+        "title": "Create Your Profile",
+        "description": "Build your professional digital identity in just a few minutes."
+      },
+      "link": {
+        "title": "Get Your Link & QR Code",
+        "description": "Every profile receives its own unique URL and QR code."
+      },
+      "share": {
+        "title": "Share Anywhere",
+        "description": "Use NFC, QR code or simply send your personal LinkCard URL."
+      },
+      "grow": {
+        "title": "Connect & Grow",
+        "description": "Expand your network and make a stronger first impression."
+      }
+    }
+  },
+    "features": {
+    "badge": "Powerful Features",
+    "title": "Everything You Need in One Link",
+    "description": "LinkCard helps you present yourself professionally, share your information instantly, and build stronger connections.",
+    "items": {
+      "contact": {
+        "title": "Multiple Contact Options",
+        "description": "Let visitors call, email, message you on WhatsApp, or save your contact instantly."
+      },
+      "portfolio": {
+        "title": "Portfolio & Gallery",
+        "description": "Showcase your work, projects, achievements, services, and professional highlights."
+      },
+      "documents": {
+        "title": "Documents & Links",
+        "description": "Share your CV, portfolio, brochures, certificates, catalogs, and important links."
+      },
+      "analytics": {
+        "title": "Profile Analytics",
+        "description": "Track profile views, link clicks, contact actions, and visitor engagement."
+      },
+      "branding": {
+        "title": "Custom Branding",
+        "description": "Personalize your profile with your colors, cover image, style, and identity."
+      },
+      "ai": {
+        "title": "AI Assistant",
+        "description": "Help visitors learn about your experience, services, and expertise instantly."
+      },
+      "qrCode": {
+        "title": "Personal QR Code",
+        "description": "Receive a unique QR code that opens your LinkCard profile immediately."
+      },
+      "sharing": {
+        "title": "Easy Sharing",
+        "description": "Share your digital profile through social media, email, messaging apps, or NFC."
+      },
+      "smartLink": {
+        "title": "One Smart Link",
+        "description": "Bring your entire professional identity together under one memorable URL."
+      },
+      "security": {
+        "title": "Secure & Private",
+        "description": "Control what appears publicly and keep your professional information protected."
+      }
+    }
+  },
+"pricing": {
+  "badge": "Simple Pricing",
+  "title": "Choose the LinkCard Plan That Fits You",
+  "description": "Start free, upgrade to Standard for all essential features, or choose Premium with a physical NFC card.",
+  "mostPopular": "Most Popular",
+  "perMonth": "/ month",
+  "freeForever": "Free forever",
+  "customPricing": "Custom Pricing",
+  "contactForQuote": "Contact us for a personalized quote based on your needs.",
+
+  "plans": {
+    "free": {
+      "name": "Free",
+      "description": "For discovering LinkCard with a very simple digital profile.",
+      "buttonLabel": "Create Free Profile",
+      "features": {
+        "profile": "1 LinkCard digital profile",
+        "photo": "Profile photo",
+        "identity": "Name and profession",
+        "phone": "1 phone number",
+        "socialLink": "1 social media link",
+        "branding": "LinkCard branding displayed"
+      }
+    },
+
+    "standard": {
+      "name": "Standard",
+      "description": "For professionals who want a complete and modern digital identity.",
+      "buttonLabel": "Choose Standard",
+      "features": {
+        "everythingFree": "Everything included in Free",
+        "whatsapp": "WhatsApp button",
+        "email": "Email button",
+        "qrCode": "Personal QR code",
+        "coverImage": "Cover image",
+        "about": "About Me section",
+        "skills": "Skills and areas of expertise",
+        "theme": "Customizable profile theme",
+        "saveContact": "Save Contact button"
+      }
+    },
+
+    "premium": {
+      "name": "Premium",
+      "description": "For professionals who want a more exclusive experience with a physical NFC card.",
+      "buttonLabel": "Request a Quote",
+      "features": {
+        "everythingStandard": "Everything included in Standard",
+        "nfcCard": "Premium physical NFC LinkCard included",
+        "premiumDesign": "Premium profile design",
+        "removeBranding": "Remove LinkCard branding",
+        "prioritySupport": "Priority support",
+        "onboarding": "Personalized setup and onboarding"
+      }
+    }
+  },
+
+  "nfcCard": {
+    "title": "The physical NFC card is included only with Premium",
+    "description": "Free and Standard include the digital profile only. The physical LinkCard NFC card is exclusive to the Premium plan."
+  }
+},
+"faq": {
+  "badge": "Frequently Asked Questions",
+  "title": "Everything You Need to Know",
+  "description": "Still have questions? Here are the answers to the most common ones.",
+  "items": {
+    "whatIsLinkCard": {
+      "question": "What is LinkCard?",
+      "answer": "LinkCard is a digital profile platform that lets you share your contact information, social media, portfolio, documents, and professional identity through one smart link and QR code."
+    },
+    "physicalCard": {
+      "question": "Do I need a physical NFC card?",
+      "answer": "No. Your LinkCard works perfectly with just a web link or QR code. NFC cards are optional and can be purchased separately."
+    },
+    "updateInformation": {
+      "question": "Can I update my information after sharing my LinkCard?",
+      "answer": "Yes. Edit your profile anytime. Everyone using your LinkCard will always see the latest version automatically."
+    },
+    "freePlan": {
+      "question": "Is there a free plan?",
+      "answer": "Yes. You can create one LinkCard profile for free and upgrade whenever you need premium features."
+    },
+    "companyProfiles": {
+      "question": "Can companies manage multiple employee profiles?",
+      "answer": "Yes. The Business plan allows organizations to manage employee profiles, apply company branding, and monitor analytics from one dashboard."
+    },
+    "saveContact": {
+      "question": "Can people save my contact directly?",
+      "answer": "Yes. Visitors can save your contact information, call you, email you, or message you instantly from your LinkCard profile."
+    }
+  }
+},
+"examples": {
+  "badge": "Professional Profiles",
+  "title": "Discover Three Ways to Use LinkCard",
+  "description": "Explore three professional profile examples designed for leaders, managers, and technical specialists.",
+  "viewDemo": "View Demo",
+  "items": {
+    "ceo": {
+      "title": "CEO or Founder",
+      "description": "Present your leadership role, company, achievements, contact information, professional links, and personal brand."
+    },
+    "manager": {
+      "title": "Director or Manager",
+      "description": "Highlight your responsibilities, management experience, department, major achievements, skills, and professional network."
+    },
+    "engineer": {
+      "title": "Engineer or Specialist",
+      "description": "Showcase your technical expertise, projects, certifications, experience, documents, and direct contact options."
+    }
+  }
+}
+}

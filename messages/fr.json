@@ -1,0 +1,267 @@
+{
+  "navbar": {
+    "features": "Fonctionnalités",
+    "howItWorks": "Comment ça marche",
+    "examples": "Exemples",
+    "pricing": "Tarifs",
+    "faq": "FAQ",
+    "login": "Connexion",
+    "signup": "Créer gratuitement",
+    "language": "Langue",
+    "openMenu": "Ouvrir le menu de navigation",
+    "closeMenu": "Fermer le menu de navigation",
+    "homeAriaLabel": "Page d’accueil LinkCard"
+  },
+
+  "hero": {
+    "badge": "Votre identité professionnelle. Un seul lien intelligent.",
+    "title": "La façon intelligente de partager",
+    "titleHighlight": "qui vous êtes.",
+    "description": "LinkCard rassemble vos coordonnées, votre identité professionnelle, vos réseaux sociaux et vos compétences dans un magnifique profil numérique.",
+
+    "advantages": {
+      "smartLink": {
+        "title": "Un seul lien intelligent",
+        "description": "Partagez tout en un seul geste."
+      },
+      "modern": {
+        "title": "Moderne et intelligent",
+        "description": "Créez un profil qui se démarque."
+      },
+      "updated": {
+        "title": "Toujours à jour",
+        "description": "Modifiez une fois, mettez à jour partout."
+      }
+    },
+
+    "primaryButton": "Commencer gratuitement",
+    "secondaryButton": "Voir un profil exemple",
+
+    "socialProof": "Rejoignez les professionnels qui utilisent déjà LinkCard",
+
+    "benefits": {
+      "noCreditCard": "Aucune carte bancaire requise",
+      "freeProfile": "Profil gratuit",
+      "updateAnytime": "Modifiable à tout moment"
+    }
+  },
+
+  "heroPhone": {
+    "coverSubtitle": "Votre identité professionnelle",
+    "coverTitle": "Un seul lien intelligent",
+
+    "jobTitle": "Ingénieur des opérations",
+    "professionalSubtitle": "Télécommunications · Entrepreneur en IA",
+    "location": "Ville de Djibouti, Djibouti",
+
+    "actions": {
+      "call": "Appeler",
+      "email": "E-mail",
+      "save": "Enregistrer"
+    },
+
+    "profileButton": "Voir mon profil",
+
+    "aboutTitle": "À propos de moi",
+
+    "aboutDescription": "Je développe des infrastructures de télécommunications fiables et des solutions numériques qui aident les professionnels à se connecter, collaborer et évoluer.",
+
+  "socialMediaTitle": "Réseaux sociaux"
+  },
+
+    "heroQRCard": {
+    "scan": "Scannez ou touchez",
+    "connect": "pour vous connecter instantanément",
+    "nfc": "NFC activé"
+  },
+
+   "trustedCompanies": {
+    "title": "Adopté par des professionnels et des entreprises"
+  },
+
+  "howItWorks": {
+    "badge": "Étapes simples",
+    "title": "Comment fonctionne LinkCard",
+    "subtitle": "Créez. Partagez. Développez votre réseau.",
+    "steps": {
+      "create": {
+        "title": "Créez votre profil",
+        "description": "Construisez votre identité professionnelle numérique en quelques minutes."
+      },
+      "link": {
+        "title": "Obtenez votre lien et votre QR Code",
+        "description": "Chaque profil reçoit une URL unique et un QR Code personnel."
+      },
+      "share": {
+        "title": "Partagez partout",
+        "description": "Utilisez le NFC, le QR Code ou partagez simplement votre lien LinkCard."
+      },
+      "grow": {
+        "title": "Développez votre réseau",
+        "description": "Faites une excellente première impression et développez votre réseau professionnel."
+      }
+    }
+  },
+   "features": {
+    "badge": "Fonctionnalités puissantes",
+    "title": "Tout ce dont vous avez besoin dans un seul lien",
+    "description": "LinkCard vous aide à vous présenter professionnellement, à partager vos informations instantanément et à créer des relations plus fortes.",
+    "items": {
+      "contact": {
+        "title": "Plusieurs options de contact",
+        "description": "Permettez aux visiteurs de vous appeler, de vous écrire par e-mail ou WhatsApp, ou d'enregistrer votre contact instantanément."
+      },
+      "portfolio": {
+        "title": "Portfolio et galerie",
+        "description": "Présentez vos travaux, projets, réalisations, services et points forts professionnels."
+      },
+      "documents": {
+        "title": "Documents et liens",
+        "description": "Partagez votre CV, votre portfolio, vos brochures, certificats, catalogues et liens importants."
+      },
+      "analytics": {
+        "title": "Statistiques du profil",
+        "description": "Suivez les vues du profil, les clics sur les liens, les actions de contact et l'engagement des visiteurs."
+      },
+      "branding": {
+        "title": "Identité personnalisée",
+        "description": "Personnalisez votre profil avec vos couleurs, votre image de couverture, votre style et votre identité."
+      },
+      "ai": {
+        "title": "Assistant IA",
+        "description": "Aidez les visiteurs à découvrir instantanément votre expérience, vos services et votre expertise."
+      },
+      "qrCode": {
+        "title": "QR Code personnel",
+        "description": "Recevez un QR Code unique qui ouvre immédiatement votre profil LinkCard."
+      },
+      "sharing": {
+        "title": "Partage facile",
+        "description": "Partagez votre profil numérique sur les réseaux sociaux, par e-mail, via les applications de messagerie ou par NFC."
+      },
+      "smartLink": {
+        "title": "Un lien intelligent",
+        "description": "Regroupez toute votre identité professionnelle sous une seule URL facile à retenir."
+      },
+      "security": {
+        "title": "Sécurisé et privé",
+        "description": "Contrôlez les informations affichées publiquement et protégez vos données professionnelles."
+      }
+    }
+  },
+"pricing": {
+  "badge": "Tarifs simples",
+  "title": "Choisissez la formule LinkCard qui vous convient",
+  "description": "Commencez gratuitement, passez à Standard pour profiter de toutes les fonctions essentielles, ou choisissez Premium avec une carte NFC physique.",
+  "mostPopular": "Le plus populaire",
+  "perMonth": "/ mois",
+  "freeForever": "Gratuit pour toujours",
+  "customPricing": "Tarif personnalisé",
+  "contactForQuote": "Contactez-nous pour recevoir une offre adaptée à vos besoins.",
+
+  "plans": {
+    "free": {
+      "name": "Gratuit",
+      "description": "Pour découvrir LinkCard avec un profil numérique très simple.",
+      "buttonLabel": "Créer gratuitement",
+      "features": {
+        "profile": "1 profil numérique LinkCard",
+        "photo": "Photo de profil",
+        "identity": "Nom et profession",
+        "phone": "1 numéro de téléphone",
+        "socialLink": "1 lien vers un réseau social",
+        "branding": "Marque LinkCard affichée"
+      }
+    },
+
+    "standard": {
+      "name": "Standard",
+      "description": "Pour les professionnels qui souhaitent une identité numérique complète et moderne.",
+      "buttonLabel": "Choisir Standard",
+      "features": {
+        "everythingFree": "Toutes les fonctionnalités de la formule Gratuite",
+        "whatsapp": "Bouton WhatsApp",
+        "email": "Bouton e-mail",
+        "qrCode": "QR Code personnel",
+        "coverImage": "Image de couverture",
+        "about": "Section À propos de moi",
+        "skills": "Compétences et domaines d’expertise",
+        "theme": "Thème de profil personnalisable",
+        "saveContact": "Bouton Enregistrer le contact"
+      }
+    },
+
+    "premium": {
+      "name": "Premium",
+      "description": "Pour les professionnels qui souhaitent une expérience plus exclusive avec une carte NFC physique.",
+      "buttonLabel": "Demander un devis",
+      "features": {
+        "everythingStandard": "Toutes les fonctionnalités de la formule Standard",
+        "nfcCard": "Carte NFC LinkCard Premium incluse",
+        "premiumDesign": "Design de profil premium",
+        "removeBranding": "Suppression de la marque LinkCard",
+        "prioritySupport": "Assistance prioritaire",
+        "onboarding": "Configuration et accompagnement personnalisés"
+      }
+    }
+  },
+
+  "nfcCard": {
+    "title": "Les cartes NFC physiques sont facultatives",
+    "description": "Les abonnements LinkCard comprennent le profil numérique. Les cartes NFC et les cartes imprimées avec QR Code pourront être achetées séparément lorsqu’elles seront disponibles."
+  }
+},
+
+"faq": {
+  "badge": "Questions fréquentes",
+  "title": "Tout ce que vous devez savoir",
+  "description": "Vous avez encore des questions ? Voici les réponses aux questions les plus fréquentes.",
+  "items": {
+    "whatIsLinkCard": {
+      "question": "Qu’est-ce que LinkCard ?",
+      "answer": "LinkCard est une plateforme de profil numérique qui vous permet de partager vos coordonnées, vos réseaux sociaux, votre portfolio, vos documents et votre identité professionnelle à travers un lien intelligent et un QR Code."
+    },
+    "physicalCard": {
+      "question": "Ai-je besoin d’une carte NFC physique ?",
+      "answer": "Non. Votre LinkCard fonctionne parfaitement avec un simple lien web ou un QR Code. Les cartes NFC sont facultatives et peuvent être achetées séparément."
+    },
+    "updateInformation": {
+      "question": "Puis-je modifier mes informations après avoir partagé ma LinkCard ?",
+      "answer": "Oui. Vous pouvez modifier votre profil à tout moment. Toute personne qui consulte votre LinkCard verra automatiquement la version la plus récente."
+    },
+    "freePlan": {
+      "question": "Existe-t-il une formule gratuite ?",
+      "answer": "Oui. Vous pouvez créer gratuitement un profil LinkCard et passer à une formule supérieure lorsque vous avez besoin de fonctionnalités premium."
+    },
+    "companyProfiles": {
+      "question": "Les entreprises peuvent-elles gérer plusieurs profils d’employés ?",
+      "answer": "Oui. La formule Entreprise permet aux organisations de gérer les profils de leurs employés, d’appliquer leur identité visuelle et de consulter les statistiques depuis un seul tableau de bord."
+    },
+    "saveContact": {
+      "question": "Les visiteurs peuvent-ils enregistrer directement mon contact ?",
+      "answer": "Oui. Les visiteurs peuvent enregistrer vos coordonnées, vous appeler, vous envoyer un e-mail ou vous écrire instantanément depuis votre profil LinkCard."
+    }
+  }
+},
+"examples": {
+  "badge": "Profils professionnels",
+  "title": "Découvrez trois façons d’utiliser LinkCard",
+  "description": "Explorez trois exemples de profils professionnels conçus pour les dirigeants, les managers et les spécialistes techniques.",
+  "viewDemo": "Voir la démo",
+  "items": {
+    "ceo": {
+      "title": "CEO ou Fondateur",
+      "description": "Présentez votre rôle de dirigeant, votre entreprise, vos réalisations, vos coordonnées, vos liens professionnels et votre image personnelle."
+    },
+    "manager": {
+      "title": "Directeur ou Manager",
+      "description": "Mettez en valeur vos responsabilités, votre expérience en management, votre département, vos réalisations et vos compétences."
+    },
+    "engineer": {
+      "title": "Ingénieur ou Spécialiste",
+      "description": "Présentez votre expertise technique, vos projets, vos certifications, votre expérience, vos documents et vos moyens de contact."
+    }
+  }
+}
+    }
+
