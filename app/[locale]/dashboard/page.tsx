@@ -46,6 +46,25 @@ import QRCodeSection from "./components/QRCodeSection";
 import SettingsSection from "./components/SettingsSection";
 import SocialLinksSection from "./components/SocialLinksSection";
 
+type ProfileForm = {
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  company: string;
+  location: string;
+  bio: string;
+  phone: string;
+  whatsapp: string;
+  email: string;
+  website: string;
+  address: string;
+  mapsLink: string;
+  bookingLink: string;
+  socialLink: string;
+  avatarUrl: string;
+  coverUrl: string;
+};
+
 type DashboardSection =
   | "dashboard"
   | "profile"
@@ -230,6 +249,10 @@ if (isMounted) {
   phone: "",
   whatsapp: "",
   email: newProfile.email,
+  website: "",
+  address: "",
+  mapsLink: "",
+  bookingLink: "",
   socialLink: "",
   avatarUrl: "",
   coverUrl: "",
