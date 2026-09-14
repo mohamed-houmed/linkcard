@@ -738,6 +738,10 @@ if (isMounted) {
 {activeSection === "settings" && (
   <SettingsSection
     isFrench={isFrench}
+    userId={userId}
+    locale={locale}
+    profileSlug={profileSlug}
+    onSlugUpdated={setProfileSlug}
   />
 )}
 </section>
