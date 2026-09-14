@@ -725,6 +725,8 @@ if (isMounted) {
 {activeSection === "qr" && (
   <QRCodeSection
     isFrench={isFrench}
+    userId={userId}
+    locale={locale}
   />
 )}
 
