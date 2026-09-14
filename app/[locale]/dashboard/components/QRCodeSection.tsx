@@ -12,12 +12,14 @@ import { useEffect, useState } from "react";
 type QRCodeSectionProps = {
   isFrench: boolean;
   userId: string;
+  profileSlug: string;
   locale: string;
 };
 
 export default function QRCodeSection({
   isFrench,
   userId,
+  profileSlug,
   locale,
 }: QRCodeSectionProps) {
   const [profileUrl, setProfileUrl] = useState("");
@@ -27,8 +29,9 @@ export default function QRCodeSection({
   useEffect(() => {
     if (!userId) return;
 
-    const url =
-      `${window.location.origin}/${locale}/p/${userId}`;
+    const url = profileSlug
+  ? `${window.location.origin}/${locale}/${profileSlug}`
+  : `${window.location.origin}/${locale}/p/${userId}`;
 
     setProfileUrl(url);
 
@@ -39,7 +42,7 @@ export default function QRCodeSection({
     })
       .then(setQrDataUrl)
       .catch(console.error);
-  }, [userId, locale]);
+}, [userId, profileSlug, locale]);
 
   async function copyLink() {
     if (!profileUrl) return;

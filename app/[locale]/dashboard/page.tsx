@@ -114,6 +114,7 @@ const [activeSection, setActiveSection] =
   bookingLink: "",
 });
 const [userId, setUserId] = useState("");
+const [profileSlug, setProfileSlug] = useState("");
 const [isLoadingProfile, setIsLoadingProfile] =
   useState(true);
 const [isSavingProfile, setIsSavingProfile] =
@@ -159,6 +160,7 @@ if (isMounted) {
       .select(`
         first_name,
         last_name,
+        slug,
         job_title,
         company,
         location,
@@ -191,7 +193,9 @@ if (isMounted) {
     }
 
     if (data) {
-      setProfile({
+  setProfileSlug(data.slug ?? "");
+
+  setProfile({
         firstName: data.first_name ?? "",
         lastName: data.last_name ?? "",
         jobTitle: data.job_title ?? "",
@@ -723,11 +727,12 @@ if (isMounted) {
 )}
 
 {activeSection === "qr" && (
-  <QRCodeSection
-    isFrench={isFrench}
-    userId={userId}
-    locale={locale}
-  />
+<QRCodeSection
+  isFrench={isFrench}
+  userId={userId}
+  profileSlug={profileSlug}
+  locale={locale}
+/>
 )}
 
 {activeSection === "settings" && (
