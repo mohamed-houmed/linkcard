@@ -225,10 +225,10 @@ const themeStyles = {
   return (
     <main className={`min-h-screen ${themeStyles.page} px-4 py-10`}>
       <div
-  className={`mx-auto max-w-md overflow-hidden rounded-[32px] shadow-xl ${themeStyles.card}`}
+  className={`mx-auto w-full max-w-[420px] overflow-hidden rounded-[32px] shadow-xl ${themeStyles.card}`}
 >
 
-        <div className={`relative h-44 ${themeStyles.header}`}>
+        <div className={`relative h-40 ${themeStyles.header}`}>
           {profile.cover_url && (
             <img
               src={profile.cover_url}
@@ -238,7 +238,7 @@ const themeStyles = {
           )}
         </div>
 
-        <div className="relative px-6 pb-8">
+        <div className="relative px-7 pb-9">
           <div className="-mt-14 flex justify-center">
             <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-violet-600 text-3xl font-black text-white shadow-lg">
               {profile.avatar_url ? (
