@@ -28,6 +28,7 @@ type PublicProfile = {
   avatar_url: string | null;
   cover_url: string | null;
   id: string;
+  theme: "violet" | "ocean" | "midnight" | null;
 };
 
 type SocialLink = {
@@ -63,6 +64,7 @@ export default function PublicProfilePage() {
           id,
           first_name,
           last_name,
+          theme,
           job_title,
           company,
           location,
@@ -177,11 +179,56 @@ export default function PublicProfilePage() {
   URL.revokeObjectURL(url);
 }
 
-  return (
-    <main className="min-h-screen bg-slate-100 px-4 py-10">
-      <div className="mx-auto max-w-md overflow-hidden rounded-[32px] bg-white shadow-xl">
+const theme = profile?.theme ?? "violet";
 
-        <div className="relative h-44 bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-500">
+const themeStyles = {
+  violet: {
+    page: "bg-violet-50",
+    card: "bg-white text-slate-950",
+    header:
+      "bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-500",
+    accent: "text-violet-600",
+    button: "bg-violet-50 text-violet-700 hover:bg-violet-100",
+    section: "bg-violet-50",
+    title: "text-slate-950",
+    muted: "text-slate-600",
+    border: "border-violet-200",
+  },
+
+  ocean: {
+    page: "bg-blue-50",
+    card: "bg-white text-slate-950",
+    header:
+      "bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600",
+    accent: "text-blue-600",
+    button: "bg-blue-50 text-blue-700 hover:bg-blue-100",
+    section: "bg-blue-50",
+    title: "text-slate-950",
+    muted: "text-slate-600",
+    border: "border-blue-200",
+  },
+
+  midnight: {
+    page: "bg-slate-950",
+    card: "bg-slate-900 text-white",
+    header:
+      "bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950",
+    accent: "text-sky-400",
+    button: "bg-slate-800 text-sky-400 hover:bg-slate-700",
+    section: "bg-slate-800",
+    title: "text-white",
+    muted: "text-slate-300",
+    border: "border-slate-600",
+  },
+}[theme];
+
+  return (
+    <main className={`min-h-screen ${themeStyles.page} px-4 py-10`}>
+      <div
+  className={`mx-auto max-w-md overflow-hidden rounded-[32px] shadow-xl ${themeStyles.card}`}
+>
+
+        <div className={`relative h-44 ${themeStyles.header}`}>
           {profile.cover_url && (
             <img
               src={profile.cover_url}
@@ -207,12 +254,20 @@ export default function PublicProfilePage() {
           </div>
 
           <div className="mt-4 text-center">
-            <h1 className="text-2xl font-black text-slate-950">
+            <h1
+  className={`text-2xl font-black ${
+    theme === "midnight" ? "text-white" : "text-slate-950"
+  }`}
+>
               {fullName || "LinkCard User"}
             </h1>
 
             {profile.job_title && (
-              <p className="mt-1 font-bold text-violet-600">
+              <p
+  className={`mt-1 text-sm font-semibold ${
+    theme === "midnight" ? "text-slate-300" : "text-slate-600"
+  }`}
+>
                 {profile.job_title}
               </p>
             )}
@@ -224,20 +279,25 @@ export default function PublicProfilePage() {
             )}
 
             {profile.location && (
-              <div className="mt-3 flex items-center justify-center gap-1 text-sm text-slate-500">
+              <div
+  className={`mt-3 flex items-center justify-center gap-1 text-sm ${
+    theme === "midnight" ? "text-slate-400" : "text-slate-500"
+  }`}
+>
                 <MapPin size={15} />
                 {profile.location}
               </div>
             )}
           </div>
 
-          <div className="mt-7 grid grid-cols-4 gap-3">
+          <div className="mt-7 flex items-start justify-evenly gap-4">
 
             {profile.phone && (
               <ContactButton
                 href={`tel:${profile.phone}`}
                 label={isFrench ? "Appeler" : "Call"}
                 icon={<Phone size={20} />}
+                theme={theme}
               />
             )}
 
@@ -248,6 +308,7 @@ export default function PublicProfilePage() {
                 )}`}
                 label="WhatsApp"
                 icon={<FaWhatsapp size={20} />}
+                theme={theme}
               />
             )}
 
@@ -256,6 +317,7 @@ export default function PublicProfilePage() {
                 href={`mailto:${profile.email}`}
                 label="Email"
                 icon={<Mail size={20} />}
+                theme={theme}
               />
             )}
 
@@ -264,6 +326,7 @@ export default function PublicProfilePage() {
                 href={normalizeUrl(profile.website)}
                 label={isFrench ? "Site" : "Website"}
                 icon={<Globe size={20} />}
+                theme={theme}
               />
             )}
           </div>
@@ -301,19 +364,19 @@ export default function PublicProfilePage() {
     }
     target="_blank"
     rel="noreferrer"
-    className="mt-5 flex gap-3 rounded-2xl border border-slate-200 p-4 transition hover:bg-slate-50"
+    className={`mt-5 flex gap-3 rounded-2xl border p-4 transition ${themeStyles.border} ${themeStyles.muted}`}
   >
     <MapPin
-      size={20}
-      className="mt-0.5 text-violet-600"
-    />
+  size={20}
+  className={`mt-0.5 ${themeStyles.accent}`}
+/>
 
     <div>
-      <p className="text-sm font-bold text-slate-950">
+      <p className={`text-sm font-bold ${themeStyles.title}`}>
         {isFrench ? "Adresse" : "Address"}
       </p>
 
-      <p className="mt-1 text-sm text-slate-600">
+      <p className={`mt-1 text-sm ${themeStyles.muted}`}>
         {profile.address}
       </p>
     </div>
@@ -340,7 +403,7 @@ export default function PublicProfilePage() {
           <div className="mt-8 text-center text-xs font-semibold text-slate-400">
             {socialLinks.length > 0 && (
   <div className="mt-7">
-    <h2 className="text-center font-black text-slate-950">
+    <h2 className={`text-center font-black ${themeStyles.title}`}>
       {isFrench
         ? "Réseaux sociaux"
         : "Connect with me"}
@@ -353,7 +416,7 @@ export default function PublicProfilePage() {
           href={normalizeUrl(link.url)}
           target="_blank"
           rel="noreferrer"
-          className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-violet-300 hover:text-violet-600"
+          className={`rounded-full border px-4 py-2 text-sm font-bold transition ${themeStyles.border} ${themeStyles.button}`}
         >
           {link.platform}
         </a>
@@ -361,7 +424,9 @@ export default function PublicProfilePage() {
     </div>
   </div>
 )}
-            Powered by LinkCard
+            <div className="mt-7 text-center text-xs font-semibold text-slate-400">
+  Powered by LinkCard
+</div>
           </div>
         </div>
       </div>
@@ -373,10 +438,12 @@ function ContactButton({
   href,
   label,
   icon,
+  theme,
 }: {
   href: string;
   label: string;
   icon: React.ReactNode;
+  theme: "violet" | "ocean" | "midnight";
 }) {
   return (
     <a
@@ -393,11 +460,16 @@ function ContactButton({
         {icon}
       </span>
 
-      <span className="text-[11px] font-bold text-slate-600">
-        {label}
-      </span>
-    </a>
-  );
+      <span
+  className={`text-[11px] font-bold ${
+    theme === "midnight" ? "text-slate-200" : "text-slate-600"
+  }`}
+>
+  {label}
+</span>
+        
+ </a>
+);
 }
 
 function cleanPhone(phone: string) {

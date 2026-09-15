@@ -64,6 +64,7 @@ type ProfileForm = {
   avatarUrl: string;
   coverUrl: string;
 };
+type Theme = "violet" | "ocean" | "midnight";
 
 type DashboardSection =
   | "dashboard"
@@ -115,6 +116,8 @@ const [activeSection, setActiveSection] =
 });
 const [userId, setUserId] = useState("");
 const [profileSlug, setProfileSlug] = useState("");
+const [profileTheme, setProfileTheme] =
+  useState<Theme>("violet");
 const [isLoadingProfile, setIsLoadingProfile] =
   useState(true);
 const [isSavingProfile, setIsSavingProfile] =
@@ -161,6 +164,7 @@ if (isMounted) {
         first_name,
         last_name,
         slug,
+        theme,
         job_title,
         company,
         location,
@@ -194,6 +198,9 @@ if (isMounted) {
 
     if (data) {
   setProfileSlug(data.slug ?? "");
+  setProfileTheme(
+  (data.theme as Theme) ?? "violet"
+);
 
   setProfile({
         firstName: data.first_name ?? "",
@@ -722,8 +729,11 @@ if (isMounted) {
 )}
 {activeSection === "appearance" && (
   <AppearanceSection
-    isFrench={isFrench}
-  />
+  isFrench={isFrench}
+  userId={userId}
+  currentTheme={profileTheme}
+  onThemeUpdated={setProfileTheme}
+/>
 )}
 
 {activeSection === "qr" && (
