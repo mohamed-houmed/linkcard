@@ -27,6 +27,15 @@ type PublicProfile = {
   booking_link: string | null;
   avatar_url: string | null;
   cover_url: string | null;
+  id: string;
+};
+
+type SocialLink = {
+  id: string;
+  platform: string;
+  url: string;
+  is_visible: boolean;
+  sort_order: number;
 };
 
 export default function PublicProfilePage() {
@@ -39,6 +48,7 @@ export default function PublicProfilePage() {
 
   const [profile, setProfile] =
     useState<PublicProfile | null>(null);
+    const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -50,6 +60,7 @@ export default function PublicProfilePage() {
       const { data, error } = await supabase
         .from("profiles")
         .select(`
+          id,
           first_name,
           last_name,
           job_title,
@@ -70,10 +81,21 @@ export default function PublicProfilePage() {
         .maybeSingle();
 
       if (error) {
-        setErrorMessage(error.message);
-      } else {
-        setProfile(data);
-      }
+  setErrorMessage(error.message);
+} else {
+  setProfile(data);
+
+  if (data?.id) {
+    const { data: links } = await supabase
+      .from("social_links")
+      .select("id, platform, url, is_visible, sort_order")
+      .eq("user_id", data.id)
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true });
+
+    setSocialLinks((links ?? []) as SocialLink[]);
+  }
+}
 
       setLoading(false);
     }
@@ -119,6 +141,41 @@ export default function PublicProfilePage() {
   const initials =
     `${profile.first_name?.[0] ?? ""}${profile.last_name?.[0] ?? ""}`
       .toUpperCase() || "LC";
+
+    function saveContact() {
+  if (!profile) return;
+
+  const vcard = [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    `N:${profile.last_name ?? ""};${profile.first_name ?? ""};;;`,
+    `FN:${fullName}`,
+    profile.company ? `ORG:${profile.company}` : "",
+    profile.job_title ? `TITLE:${profile.job_title}` : "",
+    profile.phone ? `TEL;TYPE=CELL:${profile.phone}` : "",
+    profile.email ? `EMAIL:${profile.email}` : "",
+    profile.website ? `URL:${normalizeUrl(profile.website)}` : "",
+    profile.address ? `ADR:;;${profile.address};;;;` : "",
+    "END:VCARD",
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const blob = new Blob([vcard], {
+    type: "text/vcard;charset=utf-8",
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `${fullName || "linkcard"}.vcf`;
+
+  link.click();
+
+  URL.revokeObjectURL(url);
+}
 
   return (
     <main className="min-h-screen bg-slate-100 px-4 py-10">
@@ -211,6 +268,16 @@ export default function PublicProfilePage() {
             )}
           </div>
 
+          <button
+  type="button"
+  onClick={saveContact}
+  className="mt-6 w-full rounded-2xl border border-violet-200 bg-violet-50 px-5 py-4 font-black text-violet-700 transition hover:bg-violet-100"
+>
+  {isFrench
+    ? "Enregistrer le contact"
+    : "Save contact"}
+</button>
+
           {profile.bio && (
             <div className="mt-7 rounded-3xl bg-slate-50 p-5">
               <h2 className="font-black text-slate-950">
@@ -224,27 +291,42 @@ export default function PublicProfilePage() {
           )}
 
           {profile.address && (
-            <div className="mt-5 flex gap-3 rounded-2xl border border-slate-200 p-4">
-              <MapPin
-                size={20}
-                className="mt-0.5 text-violet-600"
-              />
+  <a
+    href={
+      profile.maps_link
+        ? normalizeUrl(profile.maps_link)
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+            profile.address,
+          )}`
+    }
+    target="_blank"
+    rel="noreferrer"
+    className="mt-5 flex gap-3 rounded-2xl border border-slate-200 p-4 transition hover:bg-slate-50"
+  >
+    <MapPin
+      size={20}
+      className="mt-0.5 text-violet-600"
+    />
 
-              <div>
-                <p className="text-sm font-bold text-slate-950">
-                  {isFrench ? "Adresse" : "Address"}
-                </p>
+    <div>
+      <p className="text-sm font-bold text-slate-950">
+        {isFrench ? "Adresse" : "Address"}
+      </p>
 
-                <p className="mt-1 text-sm text-slate-600">
-                  {profile.address}
-                </p>
-              </div>
-            </div>
-          )}
+      <p className="mt-1 text-sm text-slate-600">
+        {profile.address}
+      </p>
+    </div>
+  </a>
+)}
 
-          {profile.booking_link && (
+          {(profile.booking_link || profile.id) && (
             <a
-              href={normalizeUrl(profile.booking_link)}
+              href={
+  profile.booking_link
+    ? normalizeUrl(profile.booking_link)
+    : `/${params.locale}/book/${profile.id}`
+}
               target="_blank"
               rel="noreferrer"
               className="mt-6 block rounded-2xl bg-violet-600 px-5 py-4 text-center font-black text-white transition hover:bg-violet-700"
@@ -256,6 +338,29 @@ export default function PublicProfilePage() {
           )}
 
           <div className="mt-8 text-center text-xs font-semibold text-slate-400">
+            {socialLinks.length > 0 && (
+  <div className="mt-7">
+    <h2 className="text-center font-black text-slate-950">
+      {isFrench
+        ? "Réseaux sociaux"
+        : "Connect with me"}
+    </h2>
+
+    <div className="mt-4 flex flex-wrap justify-center gap-3">
+      {socialLinks.map((link) => (
+        <a
+          key={link.id}
+          href={normalizeUrl(link.url)}
+          target="_blank"
+          rel="noreferrer"
+          className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-violet-300 hover:text-violet-600"
+        >
+          {link.platform}
+        </a>
+      ))}
+    </div>
+  </div>
+)}
             Powered by LinkCard
           </div>
         </div>
