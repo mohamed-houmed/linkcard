@@ -115,8 +115,10 @@ const [bookedIntervals, setBookedIntervals] =
           end_time:
             data.end_time ?? "17:00",
           available_days:
-            data.available_days ??
-            [1, 2, 3, 4, 5],
+          data.available_days ??
+           [1, 2, 3, 4, 5],
+
+          minimum_notice_minutes: 0,
         });
       }
 const { data: meetingTypeData, error: meetingTypeError } =
@@ -537,6 +539,67 @@ if (!overlaps) {
               className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100"
             />
           </div>
+          
+          {meetingTypes.length > 0 && (
+  <div className="mt-7">
+    <h2 className="text-sm font-black text-slate-700">
+      {isFrench ? "Type de rendez-vous" : "Meeting type"}
+    </h2>
+
+    <p className="mt-1 text-sm text-slate-500">
+      {isFrench
+        ? "Choisissez le type et la durée du rendez-vous."
+        : "Choose the meeting type and duration."}
+    </p>
+
+    <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      {meetingTypes.map((meetingType) => {
+        const selected =
+          selectedMeetingTypeId === meetingType.id;
+
+        return (
+          <button
+            key={meetingType.id}
+            type="button"
+            onClick={() => {
+              setSelectedMeetingTypeId(meetingType.id);
+              setTime("");
+            }}
+            className={`rounded-2xl border p-4 text-left transition ${
+              selected
+                ? "border-violet-600 bg-violet-50 ring-2 ring-violet-100"
+                : "border-slate-200 bg-white hover:border-violet-300 hover:bg-slate-50"
+            }`}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="font-black text-slate-900">
+                  {meetingType.name}
+                </p>
+
+                {meetingType.description && (
+                  <p className="mt-1 text-sm text-slate-500">
+                    {meetingType.description}
+                  </p>
+                )}
+              </div>
+
+              <span
+                className={`shrink-0 rounded-full px-3 py-1 text-xs font-black ${
+                  selected
+                    ? "bg-violet-600 text-white"
+                    : "bg-slate-100 text-slate-600"
+                }`}
+              >
+                {meetingType.duration_minutes} min
+              </span>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  </div>
+)}
 
           {date &&
             !selectedDayIsAvailable && (

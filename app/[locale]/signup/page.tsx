@@ -18,6 +18,7 @@ import {
 import {
   FormEvent,
   ReactNode,
+  Suspense,
   useMemo,
   useState,
 } from "react";
@@ -37,7 +38,7 @@ type SignupFormErrors = Partial<
 
 type SelectedPlan = "free" | "standard";
 
-export default function SignupPage() {
+function SignupContent() {
   const params = useParams<{ locale: string }>();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -677,5 +678,20 @@ function FormField({
         </p>
       )}
     </div>
+  );
+}
+export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-[#070711] text-white">
+          <p className="text-sm text-slate-400">
+            Loading...
+          </p>
+        </main>
+      }
+    >
+      <SignupContent />
+    </Suspense>
   );
 }

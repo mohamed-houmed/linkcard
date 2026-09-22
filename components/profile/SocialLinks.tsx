@@ -85,7 +85,7 @@ export default function SocialLinks({
         social.isVisible &&
         Boolean(social.url?.trim()) &&
         supportedTypes.includes(
-          social.type as SupportedSocialType,
+          social.platform as SupportedSocialType
         ),
     )
     .sort((a, b) => a.order - b.order);
@@ -103,7 +103,7 @@ export default function SocialLinks({
       <div className="mt-4 grid grid-cols-5 gap-2">
         {visibleSocials.map((social) => {
           const type =
-            social.type as SupportedSocialType;
+          social.platform as SupportedSocialType;
 
           const config = socialConfig[type];
           const Icon = config.icon;
