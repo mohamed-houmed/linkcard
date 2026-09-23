@@ -191,7 +191,10 @@ setMeetingTypes(
   );
 
   // Send an email notification when the appointment is confirmed
-  if (status === "confirmed" && appointment?.visitor_email) {
+  if (
+  (status === "confirmed" || status === "cancelled") &&
+  appointment?.visitor_email
+) {
     try {
       const response = await fetch("/api/appointments/notify", {
         method: "POST",
@@ -199,7 +202,7 @@ setMeetingTypes(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          type: "confirmed",
+          type: status,
           appointment,
         }),
       });
