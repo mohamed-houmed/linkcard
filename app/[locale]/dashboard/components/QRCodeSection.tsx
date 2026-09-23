@@ -30,8 +30,8 @@ export default function QRCodeSection({
     if (!userId) return;
 
     const url = profileSlug
-  ? `${window.location.origin}/${locale}/${profileSlug}`
-  : `${window.location.origin}/${locale}/p/${userId}`;
+  ? `https://www.getlinkcard.com/${locale}/${profileSlug}`
+  : `https://www.getlinkcard.com/${locale}/p/${userId}`;
 
     setProfileUrl(url);
 

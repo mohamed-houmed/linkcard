@@ -41,6 +41,7 @@ export default function LoginPage() {
 
   const locale = params.locale ?? "en";
   const isFrench = locale === "fr";
+  const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
 
   const [formData, setFormData] =
     useState<LoginFormData>({
@@ -106,6 +107,34 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   }
 
+  async function resendConfirmationEmail() {
+  const email = formData.email.trim();
+
+  if (!email) {
+    setSubmitError(
+      isFrench
+        ? "Veuillez saisir votre adresse e-mail."
+        : "Please enter your email address."
+    );
+    return;
+  }
+
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email,
+  });
+
+  if (error) {
+    setSubmitError(error.message);
+    return;
+  }
+
+  setSubmitError(
+    isFrench
+      ? "Un nouvel e-mail de confirmation a été envoyé. Vérifiez votre boîte de réception."
+      : "A new confirmation email has been sent. Please check your inbox."
+  );
+}
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>,
   ) {
@@ -117,6 +146,7 @@ export default function LoginPage() {
 
     setIsSubmitting(true);
     setSubmitError("");
+    setEmailNotConfirmed(false);
 
     try {
       const { error } =
@@ -142,6 +172,7 @@ export default function LoginPage() {
         } else if (
           message.includes("email not confirmed")
         ) {
+          setEmailNotConfirmed(true);
           setSubmitError(
             isFrench
               ? "Veuillez confirmer votre adresse e-mail avant de vous connecter."
@@ -334,6 +365,17 @@ export default function LoginPage() {
                   <p className="text-sm font-medium leading-6 text-red-700">
                     {submitError}
                   </p>
+                  {emailNotConfirmed && (
+                  <button
+                   type="button"
+                   onClick={resendConfirmationEmail}
+                  className="mt-3 text-sm font-bold text-violet-700 hover:underline"
+                 >
+                 {isFrench
+                ? "Renvoyer l’e-mail de confirmation"
+                : "Resend confirmation email"}
+               </button>
+              )}
                 </div>
               )}
 

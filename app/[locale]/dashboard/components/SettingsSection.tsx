@@ -104,10 +104,9 @@ export default function SettingsSection({
     );
   }
 
-  const profileUrl =
-    typeof window !== "undefined" && slug
-      ? `${window.location.origin}/${locale}/${slug}`
-      : "";
+  const profileUrl = slug
+  ? `https://www.getlinkcard.com/${locale}/${slug}`
+  : "";
 
   return (
     <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
