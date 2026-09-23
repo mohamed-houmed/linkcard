@@ -164,28 +164,60 @@ setMeetingTypes(
     loadData();
   }, [supabase]);
 
-  async function updateAppointmentStatus(
-    id: string,
-    status: Appointment["status"],
-  ) {
-    const { error } = await supabase
-      .from("appointments")
-      .update({ status })
-      .eq("id", id);
+ async function updateAppointmentStatus(
+  id: string,
+  status: Appointment["status"],
+) {
+  const appointment = appointments.find(
+    (appointment) => appointment.id === id
+  );
 
-    if (error) {
-      setMessage(error.message);
-      return;
-    }
+  const { error } = await supabase
+    .from("appointments")
+    .update({ status })
+    .eq("id", id);
 
-    setAppointments((current) =>
-      current.map((appointment) =>
-        appointment.id === id
-          ? { ...appointment, status }
-          : appointment,
-      ),
-    );
+  if (error) {
+    setMessage(error.message);
+    return;
   }
+
+  setAppointments((current) =>
+    current.map((appointment) =>
+      appointment.id === id
+        ? { ...appointment, status }
+        : appointment,
+    ),
+  );
+
+  // Send an email notification when the appointment is confirmed
+  if (status === "confirmed" && appointment?.visitor_email) {
+    try {
+      const response = await fetch("/api/appointments/notify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "confirmed",
+          appointment,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error(
+          "Confirmation email could not be sent:",
+          await response.text()
+        );
+      }
+    } catch (emailError) {
+      console.error(
+        "Confirmation email could not be sent:",
+        emailError
+      );
+    }
+  }
+}
 
   async function saveAvailability() {
     if (!userId) return;

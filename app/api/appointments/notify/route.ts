@@ -7,6 +7,74 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
+    /*
+     * CONFIRMATION EMAIL
+     * Sent when the profile owner confirms an appointment.
+     */
+    if (body.type === "confirmed") {
+      const appointment = body.appointment;
+
+      if (!appointment?.visitor_email) {
+        return NextResponse.json(
+          { error: "Visitor email is required" },
+          { status: 400 }
+        );
+      }
+
+      const { data, error } = await resend.emails.send({
+        from: "LinkCard <contact@getlinkcard.com>",
+        to: [appointment.visitor_email],
+        subject: "Your LinkCard appointment is confirmed",
+        html: `
+          <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+            <h2>Appointment confirmed</h2>
+
+            <p>Hello ${appointment.visitor_name || "there"},</p>
+
+            <p>
+              Good news! Your appointment request has been confirmed.
+            </p>
+
+            <p>
+              <strong>Date:</strong> ${appointment.appointment_date}<br />
+              <strong>Time:</strong> ${appointment.appointment_time}<br />
+              <strong>Meeting:</strong> ${
+                appointment.meeting_type_name || "Appointment"
+              }<br />
+              <strong>Duration:</strong> ${
+                appointment.duration_minutes || 30
+              } minutes
+            </p>
+
+            <p>
+              Your appointment is now confirmed. Please make sure
+              you're available at the scheduled time.
+            </p>
+
+            <p>LinkCard</p>
+          </div>
+        `,
+      });
+
+      if (error) {
+        console.error("Resend confirmation email error:", error);
+
+        return NextResponse.json(
+          { error: error.message },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        emailId: data?.id,
+      });
+    }
+
+    /*
+     * INITIAL APPOINTMENT REQUEST EMAIL
+     * Keep the existing behavior.
+     */
     const {
       visitorName,
       visitorEmail,
@@ -55,7 +123,7 @@ export async function POST(request: Request) {
     });
 
     if (error) {
-      console.error("Resend error:", error);
+      console.error("Resend request email error:", error);
 
       return NextResponse.json(
         { error: error.message },
