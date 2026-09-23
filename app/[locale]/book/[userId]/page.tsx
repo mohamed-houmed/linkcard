@@ -389,6 +389,32 @@ if (!overlaps) {
         return;
       }
 
+      // Send booking confirmation email
+try {
+  const emailResponse = await fetch("/api/appointments/notify", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      visitorName: name.trim(),
+      visitorEmail: email.trim(),
+      appointmentDate: date,
+      appointmentTime: time,
+      meetingType: selectedMeetingType?.name ?? "Appointment",
+      durationMinutes: selectedMeetingType?.duration_minutes ?? 30,
+    }),
+  });
+
+  if (!emailResponse.ok) {
+    console.error(
+      "Appointment saved, but confirmation email could not be sent."
+    );
+  }
+} catch (emailError) {
+  console.error("Confirmation email error:", emailError);
+}
+
       setSuccess(true);
     } finally {
         if (!selectedMeetingType) {
