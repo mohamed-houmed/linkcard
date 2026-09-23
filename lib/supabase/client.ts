@@ -14,7 +14,6 @@ export function createClient() {
     );
   }
 
-  console.log("ACTUAL SUPABASE URL:", url);
 
   return createBrowserClient(url, key);
 }
