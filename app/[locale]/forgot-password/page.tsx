@@ -10,8 +10,11 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function ForgotPasswordPage() {
+  const supabase = createClient();
+
   const params = useParams<{ locale: string }>();
 
   const locale = params.locale ?? "en";
@@ -42,25 +45,38 @@ export default function ForgotPasswordPage() {
     return true;
   }
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>,
-  ) {
-    event.preventDefault();
+async function handleSubmit(
+  event: FormEvent<HTMLFormElement>,
+) {
+  event.preventDefault();
 
-    if (!validateEmail()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    // Simulation temporaire avant Supabase.
-    await new Promise((resolve) =>
-      setTimeout(resolve, 700),
-    );
-
-    setIsSubmitting(false);
-    setIsComplete(true);
+  if (!validateEmail()) {
+    return;
   }
+
+  setIsSubmitting(true);
+
+const { error } = await supabase.auth.resetPasswordForEmail(
+  email.trim(),
+  {
+    redirectTo: `https://www.getlinkcard.com/${locale}/reset-password`,
+  }
+);
+
+setIsSubmitting(false);
+
+if (error) {
+  console.error("Password reset error:", error);
+  setError(
+    isFrench
+      ? "Impossible d'envoyer l'e-mail de réinitialisation. Veuillez réessayer."
+      : "Unable to send the password reset email. Please try again."
+  );
+  return;
+}
+
+setIsComplete(true);
+}
 
   if (isComplete) {
     return (
