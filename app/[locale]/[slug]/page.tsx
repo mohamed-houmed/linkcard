@@ -11,6 +11,7 @@ import {
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa6";
+import QRCode from "qrcode";
 
 
 type PublicProfile = {
@@ -55,6 +56,8 @@ export default function PublicProfilePage() {
 
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showQrCode, setShowQrCode] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState("");
 
   const isFrench = params.locale === "fr";
 
@@ -273,7 +276,26 @@ async function shareProfile() {
     );
   }
 }
+async function toggleQrCode() {
+  if (!showQrCode && !qrDataUrl) {
+    try {
+      const url = window.location.href;
 
+      const dataUrl = await QRCode.toDataURL(url, {
+        width: 320,
+        margin: 2,
+        errorCorrectionLevel: "M",
+      });
+
+      setQrDataUrl(dataUrl);
+    } catch (error) {
+      console.error("QR code generation error:", error);
+      return;
+    }
+  }
+
+  setShowQrCode((current) => !current);
+}
 return (
     <main className={`min-h-screen ${themeStyles.page} px-4 py-10`}>
       <div
@@ -400,6 +422,42 @@ return (
   <Share2 size={18} />
   {isFrench ? "Partager mon profil" : "Share profile"}
 </button>
+
+<button
+  type="button"
+  onClick={toggleQrCode}
+  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-200 bg-white px-5 py-4 font-bold text-violet-700 transition hover:bg-violet-50"
+>
+  {showQrCode
+    ? isFrench
+      ? "Masquer le QR code"
+      : "Hide QR code"
+    : isFrench
+      ? "Afficher le QR code"
+      : "Show QR code"}
+</button>
+
+{showQrCode && qrDataUrl && (
+  <div className="mt-4 rounded-3xl border border-slate-100 bg-white p-5 text-center shadow-sm">
+    <p className="mb-4 font-bold text-slate-900">
+      {isFrench
+        ? "Scannez pour ouvrir mon profil"
+        : "Scan to open my profile"}
+    </p>
+
+    <img
+      src={qrDataUrl}
+      alt="LinkCard profile QR code"
+      className="mx-auto h-52 w-52"
+    />
+
+    <p className="mt-3 text-xs text-slate-500">
+      {isFrench
+        ? "Scannez avec l'appareil photo de votre téléphone"
+        : "Scan with your phone camera"}
+    </p>
+  </div>
+)}
 
           {profile.bio && (
             <div className="mt-7 rounded-3xl bg-slate-50 p-5">
