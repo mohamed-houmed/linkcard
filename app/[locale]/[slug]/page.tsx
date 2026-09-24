@@ -6,10 +6,12 @@ import {
   Mail,
   MapPin,
   Phone,
+  Share2
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa6";
+
 
 type PublicProfile = {
   first_name: string | null;
@@ -81,6 +83,11 @@ export default function PublicProfilePage() {
         `)
         .eq("slug", params.slug)
         .maybeSingle();
+        console.log("PUBLIC PROFILE DEBUG", {
+        slug: params.slug,
+        data,
+        error,
+  });
 
       if (error) {
   setErrorMessage(error.message);
@@ -162,7 +169,26 @@ export default function PublicProfilePage() {
   ]
     .filter(Boolean)
     .join("\n");
+ async function shareProfile() {
+  const url = window.location.href;
 
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: profile
+          ? `${profile.first_name} ${profile.last_name}`
+          : "LinkCard",
+        text: "View my professional LinkCard profile",
+        url,
+      });
+    } catch {
+      // User cancelled sharing
+    }
+  } else {
+    await navigator.clipboard.writeText(url);
+    alert("Profile link copied!");
+  }
+}
   const blob = new Blob([vcard], {
     type: "text/vcard;charset=utf-8",
   });
@@ -222,7 +248,33 @@ const themeStyles = {
   },
 }[theme];
 
-  return (
+async function shareProfile() {
+  const url = window.location.href;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: fullName || "LinkCard",
+        text: isFrench
+          ? "Découvrez mon profil professionnel LinkCard"
+          : "View my professional LinkCard profile",
+        url,
+      });
+    } catch {
+      // User cancelled sharing
+    }
+  } else {
+    await navigator.clipboard.writeText(url);
+
+    alert(
+      isFrench
+        ? "Lien du profil copié !"
+        : "Profile link copied!"
+    );
+  }
+}
+
+return (
     <main className={`min-h-screen ${themeStyles.page} px-4 py-10`}>
       <div
   className={`mx-auto w-full max-w-[420px] overflow-hidden rounded-[32px] shadow-xl ${themeStyles.card}`}
@@ -339,6 +391,14 @@ const themeStyles = {
   {isFrench
     ? "Enregistrer le contact"
     : "Save contact"}
+</button>
+<button
+  type="button"
+  onClick={shareProfile}
+  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-200 bg-white px-5 py-4 font-bold text-violet-700 transition hover:bg-violet-50"
+>
+  <Share2 size={18} />
+  {isFrench ? "Partager mon profil" : "Share profile"}
 </button>
 
           {profile.bio && (
