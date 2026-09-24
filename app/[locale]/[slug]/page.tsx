@@ -484,8 +484,25 @@ return (
     </div>
   </div>
 )}
-            <div className="mt-7 text-center text-xs font-semibold text-slate-400">
-  Powered by LinkCard
+           <div className="mt-7 border-t border-slate-100 pt-6 text-center">
+  <p className="text-xs font-semibold text-slate-400">
+    Powered by <span className="font-bold text-violet-600">LinkCard</span>
+  </p>
+
+  <p className="mt-2 text-sm text-slate-500">
+    {isFrench
+      ? "Votre identité professionnelle, en un seul lien."
+      : "Your professional identity, in one link."}
+  </p>
+
+  <a
+    href={`/${params.locale}/signup`}
+    className="mt-3 inline-flex items-center justify-center font-bold text-violet-600 transition hover:text-violet-700 hover:underline"
+  >
+    {isFrench
+      ? "Créer ma LinkCard →"
+      : "Create your LinkCard →"}
+  </a>
 </div>
           </div>
         </div>
