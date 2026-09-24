@@ -152,7 +152,7 @@
 "pricing": {
   "badge": "Simple Pricing",
   "title": "Choose the LinkCard Plan That Fits You",
-  "description": "Start free, upgrade to Standard for all essential features, or choose Premium with a physical NFC card.",
+  "description":"Choose Digital for the essentials, upgrade to Digital Plus for advanced features, or get a physical LinkCard NFC.",
   "mostPopular": "Most Popular",
   "perMonth": "/ month",
   "freeForever": "Free forever",
@@ -160,49 +160,49 @@
   "contactForQuote": "Contact us for a personalized quote based on your needs.",
 
   "plans": {
-    "free": {
-      "name": "Free",
-      "description": "For discovering LinkCard with a very simple digital profile.",
-      "buttonLabel": "Create Free Profile",
-      "features": {
-        "profile": "1 LinkCard digital profile",
-        "photo": "Profile photo",
-        "identity": "Name and profession",
-        "phone": "1 phone number",
-        "socialLink": "1 social media link",
-        "branding": "LinkCard branding displayed"
+      "free": {
+        "name": "Digital",
+       "description": "Your essential professional digital profile, ready to share anywhere.",
+        "buttonLabel": "Choose Digital",
+        "features": {
+        "profile": "1 professional digital profile",
+        "photo": "Profile & cover photo",
+        "identity": "Professional information",
+        "phone": "Call & WhatsApp buttons",
+        "socialLink": "Social media links",
+        "branding": "Personal QR code"
       }
     },
 
     "standard": {
-      "name": "Standard",
-      "description": "For professionals who want a complete and modern digital identity.",
-      "buttonLabel": "Choose Standard",
-      "features": {
-        "everythingFree": "Everything included in Free",
-        "whatsapp": "WhatsApp button",
-        "email": "Email button",
-        "qrCode": "Personal QR code",
-        "coverImage": "Cover image",
-        "about": "About Me section",
-        "skills": "Skills and areas of expertise",
-        "theme": "Customizable profile theme",
+        "name": "Digital Plus",
+        "description": "For professionals who want a complete digital profile with advanced features.",
+        "buttonLabel": "Choose Digital Plus",
+        "features": {
+        "everythingFree": "Everything included in Digital",
+        "whatsapp": "Appointment booking",
+        "email": "Share profile button",
+        "qrCode": "Advanced contact information",
+        "coverImage": "About Me section",
+        "about": "Skills & areas of expertise",
+        "skills": "Multiple social media links",
+        "theme": "Customizable profile themes",
         "saveContact": "Save Contact button"
-      }
+}
     },
 
     "premium": {
-      "name": "Premium",
-      "description": "For professionals who want a more exclusive experience with a physical NFC card.",
-      "buttonLabel": "Request a Quote",
-      "features": {
-        "everythingStandard": "Everything included in Standard",
-        "nfcCard": "Premium physical NFC LinkCard included",
-        "premiumDesign": "Premium profile design",
-        "removeBranding": "Remove LinkCard branding",
-        "prioritySupport": "Priority support",
-        "onboarding": "Personalized setup and onboarding"
-      }
+       "name": "LinkCard NFC",
+       "description": "A physical NFC card that instantly opens your LinkCard profile with a simple tap.",
+       "buttonLabel": "Get NFC Card",
+       "features": {
+        "everythingStandard": "Physical LinkCard NFC card",
+        "nfcCard": "Tap to instantly open your profile",
+        "premiumDesign": "Personalized card with your identity",
+        "removeBranding": "Works with compatible smartphones",
+        "prioritySupport": "No app required to tap",
+       "onboarding": "Card setup & NFC programming included"
+}
     }
   },
 

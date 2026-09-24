@@ -12,27 +12,29 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 type QuoteFormData = {
   fullName: string;
+  jobTitle: string;
   company: string;
   email: string;
   phone: string;
-  message: string;
 };
 
 export default function PremiumContactPage() {
   const params = useParams<{ locale: string }>();
   const locale = params.locale ?? "en";
   const isFrench = locale === "fr";
+  const supabase = createClient();
 
   const [formData, setFormData] = useState<QuoteFormData>({
-    fullName: "",
-    company: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
+  fullName: "",
+  jobTitle: "",
+  company: "",
+  email: "",
+  phone: "",
+});
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -53,8 +55,24 @@ export default function PremiumContactPage() {
     event.preventDefault();
     setIsSubmitting(true);
 
-    // Temporary simulation until email/database integration.
-    await new Promise((resolve) => setTimeout(resolve, 700));
+    const { error } = await supabase
+  .from("nfc_orders")
+  .insert({
+    full_name: formData.fullName,
+    job_title: formData.jobTitle,
+    company: formData.company || null,
+    email: formData.email,
+    phone: formData.phone,
+    product: "LinkCard NFC",
+    price_fdj: 12999,
+    status: "pending",
+  });
+
+if (error) {
+  console.error("Error creating NFC order:", error);
+  setIsSubmitting(false);
+  return;
+}
 
     setIsSubmitting(false);
     setIsComplete(true);
@@ -70,14 +88,14 @@ export default function PremiumContactPage() {
 
           <h1 className="mt-6 text-3xl font-black">
             {isFrench
-              ? "Demande envoyée"
-              : "Request submitted"}
+  ? "Commande reçue"
+  : "Order received"}
           </h1>
 
           <p className="mt-4 leading-7 text-slate-300">
             {isFrench
-              ? "Votre demande Premium a bien été enregistrée. L’équipe LinkCard vous contactera afin de préparer une offre personnalisée."
-              : "Your Premium request has been recorded. The LinkCard team will contact you to prepare a personalized offer."}
+  ? "Votre commande LinkCard NFC a bien été reçue. Notre équipe vous contactera pour confirmer les détails de votre carte."
+  : "Your LinkCard NFC order has been received. Our team will contact you to confirm your card details."}
           </p>
 
           <Link
@@ -107,43 +125,52 @@ export default function PremiumContactPage() {
         <div className="mt-8 grid overflow-hidden rounded-[36px] border border-white/10 bg-white shadow-2xl lg:grid-cols-[0.85fr_1.15fr]">
           <aside className="bg-gradient-to-br from-violet-700 via-purple-800 to-indigo-950 p-8 sm:p-10">
             <p className="text-sm font-black uppercase tracking-[0.18em] text-violet-200">
-              LinkCard Premium
-            </p>
+  LINKCARD NFC
+</p>
 
-            <h1 className="mt-4 text-4xl font-black">
-              {isFrench
-                ? "Tarif personnalisé"
-                : "Custom pricing"}
-            </h1>
+<h1 className="mt-4 text-4xl font-black">
+  12,999 FDJ
+</h1>
+
+<p className="mt-2 text-sm font-bold text-violet-100">
+  {isFrench
+    ? "Paiement unique"
+    : "One-time payment"}
+</p>
 
             <p className="mt-5 text-sm leading-7 text-violet-100/80">
-              {isFrench
-                ? "Recevez une solution adaptée à votre profil, votre design et votre carte NFC physique."
-                : "Receive an offer adapted to your profile, design, and physical NFC card."}
-            </p>
+  {isFrench
+    ? "Une carte NFC physique personnalisée qui ouvre instantanément votre profil LinkCard d’un simple contact."
+    : "A personalized physical NFC card that instantly opens your LinkCard profile with a simple tap."}
+</p>
 
             <div className="my-8 border-t border-white/15" />
 
             <ul className="space-y-4 text-sm text-violet-50">
               {[
-                isFrench
-                  ? "Toutes les fonctionnalités Standard"
-                  : "Everything included in Standard",
-                isFrench
-                  ? "Carte NFC physique Premium incluse"
-                  : "Premium physical NFC card included",
-                isFrench
-                  ? "Design de profil premium"
-                  : "Premium profile design",
-                isFrench
-                  ? "Suppression de la marque LinkCard"
-                  : "Remove LinkCard branding",
-                isFrench
-                  ? "Configuration personnalisée"
-                  : "Personalized setup",
-                isFrench
-                  ? "Assistance prioritaire"
-                  : "Priority support",
+  isFrench
+    ? "Carte LinkCard NFC physique"
+    : "Physical LinkCard NFC card",
+
+  isFrench
+    ? "Ouverture instantanée du profil par NFC"
+    : "Tap to instantly open your profile",
+
+  isFrench
+    ? "Carte personnalisée à votre identité"
+    : "Personalized card with your identity",
+
+  isFrench
+    ? "Compatible avec les smartphones NFC"
+    : "Works with NFC-compatible smartphones",
+
+  isFrench
+    ? "Aucune application requise"
+    : "No app required",
+
+  isFrench
+    ? "Configuration et programmation NFC incluses"
+    : "NFC setup & programming included",
               ].map((feature) => (
                 <li key={feature} className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15">
@@ -157,22 +184,22 @@ export default function PremiumContactPage() {
 
           <section className="bg-white p-8 text-slate-950 sm:p-10">
             <p className="text-sm font-black uppercase tracking-[0.18em] text-violet-600">
-              {isFrench
-                ? "Demande de devis"
-                : "Quote request"}
-            </p>
+  {isFrench
+    ? "Commande NFC"
+    : "NFC Card Order"}
+</p>
 
             <h2 className="mt-3 text-3xl font-black">
-              {isFrench
-                ? "Parlez-nous de vos besoins"
-                : "Tell us about your needs"}
-            </h2>
+  {isFrench
+    ? "Commandez votre LinkCard NFC"
+    : "Order your LinkCard NFC"}
+</h2>
 
             <p className="mt-3 text-sm leading-6 text-slate-600">
-              {isFrench
-                ? "Remplissez ce formulaire afin que nous puissions préparer une offre Premium personnalisée."
-                : "Complete this form so we can prepare a personalized Premium offer."}
-            </p>
+  {isFrench
+    ? "Remplissez ce formulaire pour commander votre carte LinkCard NFC personnalisée."
+    : "Complete this form to order your personalized LinkCard NFC card."}
+</p>
 
             <form
               onSubmit={handleSubmit}
@@ -190,7 +217,23 @@ export default function PremiumContactPage() {
                 }
                 required
               />
+              <div className="relative">
+  <UserRound
+    size={19}
+    className="absolute left-4 top-4 text-slate-400"
+  />
 
+  <input
+    type="text"
+    value={formData.jobTitle}
+    onChange={(event) =>
+      updateField("jobTitle", event.target.value)
+    }
+    placeholder={isFrench ? "Fonction / poste" : "Job title"}
+    required
+    className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-12 pr-4 outline-none transition focus:border-violet-400 focus:ring-4 focus:ring-violet-100"
+  />
+</div>
               <Field
                 icon={<BriefcaseBusiness size={19} />}
                 type="text"
@@ -237,21 +280,8 @@ export default function PremiumContactPage() {
                   className="absolute left-4 top-4 text-slate-400"
                 />
 
-                <textarea
-                  value={formData.message}
-                  onChange={(event) =>
-                    updateField("message", event.target.value)
-                  }
-                  placeholder={
-                    isFrench
-                      ? "Décrivez brièvement vos besoins..."
-                      : "Briefly describe your needs..."
-                  }
-                  rows={5}
-                  className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 py-4 pl-12 pr-4 outline-none transition focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100"
-                />
               </div>
-
+              
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -262,8 +292,8 @@ export default function PremiumContactPage() {
                     ? "Envoi en cours..."
                     : "Submitting..."
                   : isFrench
-                    ? "Demander mon devis Premium"
-                    : "Request my Premium quote"}
+  ? "Commander ma LinkCard NFC — 12 999 FDJ"
+  : "Order my LinkCard NFC — 12,999 FDJ"}
               </button>
             </form>
           </section>

@@ -25,6 +25,11 @@ export default function SettingsSection({
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState("");
+const [passwordError, setPasswordError] = useState(false);
 
   useEffect(() => {
     setSlug(profileSlug);
@@ -53,6 +58,7 @@ export default function SettingsSection({
           ? "Le lien doit contenir au moins 3 caractères."
           : "The public link must contain at least 3 characters."
       );
+
       return;
     }
 
@@ -108,6 +114,53 @@ export default function SettingsSection({
   ? `https://www.getlinkcard.com/${locale}/${slug}`
   : "";
 
+  async function changePassword() {
+  setPasswordMessage("");
+  setPasswordError(false);
+
+  if (newPassword.length < 8) {
+    setPasswordError(true);
+    setPasswordMessage(
+      isFrench
+        ? "Le mot de passe doit contenir au moins 8 caractères."
+        : "Password must contain at least 8 characters."
+    );
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    setPasswordError(true);
+    setPasswordMessage(
+      isFrench
+        ? "Les mots de passe ne correspondent pas."
+        : "Passwords do not match."
+    );
+    return;
+  }
+
+  setPasswordSaving(true);
+
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  setPasswordSaving(false);
+
+  if (error) {
+    setPasswordError(true);
+    setPasswordMessage(error.message);
+    return;
+  }
+
+  setNewPassword("");
+  setConfirmPassword("");
+  setPasswordError(false);
+  setPasswordMessage(
+    isFrench
+      ? "Mot de passe modifié avec succès."
+      : "Password updated successfully."
+  );
+}
   return (
     <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
 
@@ -223,6 +276,80 @@ export default function SettingsSection({
         </div>
 
       </div>
+      <div className="mt-6 rounded-[32px] border border-slate-200 bg-white p-8 shadow-sm">
+  <p className="text-sm font-black uppercase tracking-[0.18em] text-violet-600">
+    {isFrench ? "Compte & sécurité" : "Account & Security"}
+  </p>
+
+  <h2 className="mt-3 text-3xl font-black text-slate-950">
+    {isFrench ? "Changer votre mot de passe" : "Change your password"}
+  </h2>
+
+  <p className="mt-3 text-slate-600">
+    {isFrench
+      ? "Modifiez le mot de passe utilisé pour accéder à votre compte LinkCard."
+      : "Update the password you use to access your LinkCard account."}
+  </p>
+
+  <div className="mt-8 space-y-5">
+    <div>
+      <label className="mb-2 block font-bold text-slate-900">
+        {isFrench ? "Nouveau mot de passe" : "New password"}
+      </label>
+
+      <input
+        type="password"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+        placeholder={isFrench ? "Nouveau mot de passe" : "New password"}
+        className="w-full rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 outline-none focus:border-violet-500"
+      />
+    </div>
+
+    <div>
+      <label className="mb-2 block font-bold text-slate-900">
+        {isFrench ? "Confirmer le mot de passe" : "Confirm password"}
+      </label>
+
+      <input
+        type="password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        placeholder={
+          isFrench ? "Confirmez le nouveau mot de passe" : "Confirm new password"
+        }
+        className="w-full rounded-xl border border-slate-200 bg-slate-50 px-5 py-4 outline-none focus:border-violet-500"
+      />
+    </div>
+
+    {passwordMessage && (
+      <p
+        className={
+          passwordError
+            ? "font-semibold text-red-600"
+            : "font-semibold text-emerald-600"
+        }
+      >
+        {passwordMessage}
+      </p>
+    )}
+
+    <button
+      type="button"
+      onClick={changePassword}
+      disabled={passwordSaving}
+      className="rounded-xl bg-violet-600 px-6 py-3 font-bold text-white transition hover:bg-violet-700 disabled:opacity-50"
+    >
+      {passwordSaving
+        ? isFrench
+          ? "Modification..."
+          : "Updating..."
+        : isFrench
+          ? "Modifier le mot de passe"
+          : "Update password"}
+    </button>
+  </div>
+</div>
     </div>
   );
 }

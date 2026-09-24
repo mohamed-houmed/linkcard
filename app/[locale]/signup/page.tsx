@@ -79,73 +79,70 @@ function SignupContent() {
     useState(false);
 
   const planName =
-    selectedPlan === "standard"
-      ? "Standard"
-      : isFrench
-        ? "Gratuit"
-        : "Free";
+  selectedPlan === "standard"
+    ? "Digital Plus"
+    : "Digital";
 
   const planPrice =
-    selectedPlan === "standard"
-      ? isFrench
-        ? "1 999 FDJ / mois"
-        : "1,999 FDJ / month"
-      : isFrench
-        ? "0 FDJ — Gratuit"
-        : "0 FDJ — Free";
+  selectedPlan === "standard"
+    ? isFrench
+      ? "2 999 FDJ / mois"
+      : "2,999 FDJ / month"
+    : isFrench
+      ? "999 FDJ / mois"
+      : "999 FDJ / month";
 
   const planDescription =
-    selectedPlan === "standard"
-      ? isFrench
-        ? "Pour les professionnels qui souhaitent une identité numérique complète et moderne."
-        : "For professionals who want a complete and modern digital identity."
-      : isFrench
-        ? "Pour découvrir LinkCard avec un profil numérique simple."
-        : "For discovering LinkCard with a simple digital profile.";
+  selectedPlan === "standard"
+    ? isFrench
+      ? "Un profil professionnel complet avec des fonctionnalités avancées."
+      : "A complete professional profile with advanced features."
+    : isFrench
+      ? "Votre profil professionnel numérique essentiel, prêt à être partagé partout."
+      : "Your essential professional digital profile, ready to share anywhere.";
 
   const planFeatures =
-    selectedPlan === "standard"
-      ? isFrench
-        ? [
-            "Toutes les fonctionnalités de la formule Gratuite",
-            "Bouton WhatsApp",
-            "Bouton e-mail",
-            "QR Code personnel",
-            "Image de couverture",
-            "Section À propos de moi",
-            "Compétences et domaines d’expertise",
-            "Thème personnalisable",
-            "Enregistrement du contact",
-          ]
-        : [
-            "Everything included in Free",
-            "WhatsApp button",
-            "Email button",
-            "Personal QR code",
-            "Cover image",
-            "About Me section",
-            "Skills and areas of expertise",
-            "Customizable theme",
-            "Save Contact button",
-          ]
-      : isFrench
-        ? [
-            "1 profil numérique LinkCard",
-            "Photo de profil",
-            "Nom et profession",
-            "1 numéro de téléphone",
-            "1 lien vers un réseau social",
-            "Marque LinkCard affichée",
-          ]
-        : [
-            "1 LinkCard digital profile",
-            "Profile photo",
-            "Name and profession",
-            "1 phone number",
-            "1 social media link",
-            "LinkCard branding displayed",
-          ];
-
+  selectedPlan === "standard"
+    ? isFrench
+      ? [
+          "Tout ce qui est inclus dans Digital",
+          "Prise de rendez-vous",
+          "Partage du profil",
+          "Informations de contact avancées",
+          "Section À propos",
+          "Compétences et domaines d’expertise",
+          "Plusieurs réseaux sociaux",
+          "Thèmes de profil personnalisables",
+          "Bouton Enregistrer le contact",
+        ]
+      : [
+          "Everything included in Digital",
+          "Appointment booking",
+          "Share profile",
+          "Advanced contact information",
+          "About Me section",
+          "Skills & areas of expertise",
+          "Multiple social media links",
+          "Customizable profile themes",
+          "Save Contact button",
+        ]
+    : isFrench
+      ? [
+          "1 profil numérique professionnel",
+          "Photo de profil et de couverture",
+          "Informations professionnelles",
+          "Boutons Appel et WhatsApp",
+          "Liens vers les réseaux sociaux",
+          "QR code personnel",
+        ]
+      : [
+          "1 professional digital profile",
+          "Profile & cover photo",
+          "Professional information",
+          "Call & WhatsApp buttons",
+          "Social media links",
+          "Personal QR code",
+        ];
   function updateField(
     field: keyof SignupFormData,
     value: string,

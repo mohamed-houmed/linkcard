@@ -14,9 +14,9 @@ export default async function Pricing() {
       id: "free",
       name: t("plans.free.name"),
       description: t("plans.free.description"),
-      dollarPrice: "$0",
-      fdjPrice: "0 FDJ",
-      priceNote: t("freeForever"),
+      dollarPrice: "$5.70",
+      fdjPrice: "999 FDJ",
+      priceNote: t("perMonth"),
       buttonLabel: t("plans.free.buttonLabel"),
       buttonHref: `/${locale}/signup?plan=free`,
       highlighted: false,
@@ -34,8 +34,8 @@ export default async function Pricing() {
       id: "standard",
       name: t("plans.standard.name"),
       description: t("plans.standard.description"),
-      dollarPrice: "$11.50",
-      fdjPrice: "1,999 FDJ",
+      dollarPrice: "$17",
+      fdjPrice: "2,999 FDJ",
       priceNote: t("perMonth"),
       buttonLabel: t("plans.standard.buttonLabel"),
       buttonHref: `/${locale}/signup?plan=standard`,
@@ -57,13 +57,13 @@ export default async function Pricing() {
       id: "premium",
       name: t("plans.premium.name"),
       description: t("plans.premium.description"),
-      dollarPrice: t("customPricing"),
-      fdjPrice: "",
-      priceNote: t("contactForQuote"),
+      dollarPrice: "$74",
+      fdjPrice: "12,999 FDJ",
+      priceNote: "One-time payment",
       buttonLabel: t("plans.premium.buttonLabel"),
       buttonHref: `/${locale}/contact?plan=premium`,
       highlighted: false,
-      customPricing: true,
+      customPricing: false,
       features: [
         t("plans.premium.features.everythingStandard"),
         t("plans.premium.features.nfcCard"),
@@ -148,7 +148,7 @@ export default async function Pricing() {
                     {plan.dollarPrice}
                   </span>
 
-                  {!plan.customPricing && plan.id !== "free" && (
+                  {!plan.customPricing && plan.id !== "premium" && (
                     <span
                       className={
                         plan.highlighted
