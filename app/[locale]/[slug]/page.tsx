@@ -408,7 +408,7 @@ return (
           <button
   type="button"
   onClick={saveContact}
-  className="mt-6 w-full rounded-2xl border border-violet-200 bg-violet-50 px-5 py-4 font-black text-violet-700 transition hover:bg-violet-100"
+  className="mt-4 w-full rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition hover:bg-violet-100"
 >
   {isFrench
     ? "Enregistrer le contact"
@@ -417,7 +417,7 @@ return (
 <button
   type="button"
   onClick={shareProfile}
-  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-200 bg-white px-5 py-4 font-bold text-violet-700 transition hover:bg-violet-50"
+  className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition hover:bg-violet-100"
 >
   <Share2 size={18} />
   {isFrench ? "Partager mon profil" : "Share profile"}
@@ -426,7 +426,7 @@ return (
 <button
   type="button"
   onClick={toggleQrCode}
-  className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-violet-200 bg-white px-5 py-4 font-bold text-violet-700 transition hover:bg-violet-50"
+  className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition hover:bg-violet-100"
 >
   {showQrCode
     ? isFrench
