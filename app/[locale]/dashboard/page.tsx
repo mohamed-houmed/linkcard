@@ -343,6 +343,13 @@ if (isMounted) {
       company: profile.company.trim(),
       location: profile.location.trim(),
       bio: profile.bio.trim(),
+
+      expertise: profile.expertise
+      .map((item) => item.trim())
+      .filter(Boolean),
+
+       journey: profile.journey,
+
       phone: profile.phone.trim(),
       whatsapp: profile.whatsapp.trim(),
       email: profile.email.trim(),
