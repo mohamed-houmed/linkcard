@@ -211,17 +211,17 @@ export default function PublicProfilePage() {
             )}
           </div>
 
-          {profile.bio && (
-            <div className="mt-7 rounded-3xl bg-slate-50 p-5">
-              <h2 className="font-black text-slate-950">
-                {isFrench ? "À propos" : "About me"}
-              </h2>
+         {profile.bio && (
+  <div className="mt-7 border-t border-slate-100 pt-5">
+    <h2 className="text-base font-black text-slate-950">
+      {isFrench ? "À propos" : "About me"}
+    </h2>
 
-              <p className="mt-3 whitespace-pre-line leading-7 text-slate-600">
-                {profile.bio}
-              </p>
-            </div>
-          )}
+    <p className="mt-2 whitespace-pre-line text-[15px] leading-6 text-slate-600">
+      {profile.bio}
+    </p>
+  </div>
+)}
 
           {profile.address && (
             <div className="mt-5 flex gap-3 rounded-2xl border border-slate-200 p-4">

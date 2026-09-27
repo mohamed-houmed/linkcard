@@ -53,6 +53,12 @@ type ProfileForm = {
   company: string;
   location: string;
   bio: string;
+  expertise: string[];
+  journey: {
+  period: string;
+  title: string;
+  organization: string;
+  }[];
   phone: string;
   whatsapp: string;
   email: string;
@@ -103,6 +109,8 @@ const [activeSection, setActiveSection] =
   company: "",
   location: "",
   bio: "",
+  expertise: [],
+  journey: [],
   phone: "",
   whatsapp: "",
   email: "",
@@ -177,8 +185,10 @@ if (isMounted) {
         maps_link,
         booking_link,
         avatar_url,
-        cover_url
-      `)
+        cover_url,
+        expertise,
+        journey
+       `)
       .eq("id", user.id)
       .maybeSingle();
 
@@ -209,6 +219,8 @@ if (isMounted) {
         company: data.company ?? "",
         location: data.location ?? "",
         bio: data.bio ?? "",
+        expertise: Array.isArray(data.expertise) ? data.expertise : [],
+        journey: Array.isArray(data.journey) ? data.journey : [],
         phone: data.phone ?? "",
         whatsapp: data.whatsapp ?? "",
         email: data.email ?? user.email ?? "",
@@ -257,6 +269,8 @@ if (isMounted) {
   company: "",
   location: "",
   bio: "",
+  expertise: [],
+  journey: [],
   phone: "",
   whatsapp: "",
   email: newProfile.email,
@@ -286,17 +300,17 @@ if (isMounted) {
   supabase,
 ]);
 
-  function updateField(
-    field: keyof ProfileForm,
-    value: string,
-  ) {
-    setProfile((current) => ({
-      ...current,
-      [field]: value,
-    }));
+  function updateField<K extends keyof ProfileForm>(
+  field: K,
+  value: ProfileForm[K],
+) {
+  setProfile((current) => ({
+    ...current,
+    [field]: value,
+  }));
 
-    setSaved(false);
-  }
+  setSaved(false);
+}
 
  async function saveProfile() {
   setIsSavingProfile(true);

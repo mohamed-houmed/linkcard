@@ -1,3 +1,11 @@
+export type JourneyItem = {
+  period: string;
+  title: string;
+  organization: string;
+};
+
+export type ExpertiseItem = string;
+
 export type Profile = {
   id: string;
   ownerId: string;
@@ -10,6 +18,8 @@ export type Profile = {
   companyName: string | null;
   headline: string | null;
   bio: string | null;
+  expertise: ExpertiseItem[];
+  journey: JourneyItem[];
 
   profileImageUrl: string | null;
   coverImageUrl: string | null;

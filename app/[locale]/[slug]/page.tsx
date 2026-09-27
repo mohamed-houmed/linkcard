@@ -2,11 +2,18 @@
 
 import { createClient } from "@/lib/supabase/client";
 import {
+  CalendarDays,
+  ChevronDown,
   Globe,
   Mail,
   MapPin,
   Phone,
-  Share2
+  QrCode,
+  Share2,
+  UserPlus,
+  UserRound,
+  Lightbulb,
+ ChartNoAxesColumnIncreasing,
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -58,6 +65,9 @@ export default function PublicProfilePage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showQrCode, setShowQrCode] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState("");
+  const [aboutOpen, setAboutOpen] = useState(true);
+  const [expertiseOpen, setExpertiseOpen] = useState(true);
+  const [journeyOpen, setJourneyOpen] = useState(true);
 
   const isFrench = params.locale === "fr";
 
@@ -405,38 +415,64 @@ return (
             )}
           </div>
 
-          <button
-  type="button"
-  onClick={saveContact}
-  className="mt-4 w-full rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition hover:bg-violet-100"
->
-  {isFrench
-    ? "Enregistrer le contact"
-    : "Save contact"}
-</button>
-<button
-  type="button"
-  onClick={shareProfile}
-  className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition hover:bg-violet-100"
->
-  <Share2 size={18} />
-  {isFrench ? "Partager mon profil" : "Share profile"}
-</button>
+          <div className="mt-4 grid grid-cols-4 gap-1.5">
+  <button
+    type="button"
+    onClick={saveContact}
+    className="flex min-h-[82px] flex-col items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50/50 px-1 py-3 text-center text-violet-700 transition hover:bg-violet-50"
+  >
+    <UserPlus size={23} strokeWidth={2.2} />
+    <span className="text-[11px] font-bold leading-tight">
+      {isFrench ? "Enregistrer" : "Save contact"}
+    </span>
+  </button>
 
-<button
-  type="button"
-  onClick={toggleQrCode}
-  className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition hover:bg-violet-100"
->
-  {showQrCode
-    ? isFrench
-      ? "Masquer le QR code"
-      : "Hide QR code"
-    : isFrench
-      ? "Afficher le QR code"
-      : "Show QR code"}
-</button>
+  <button
+    type="button"
+    onClick={shareProfile}
+    className="flex min-h-[82px] flex-col items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50/50 px-1 py-3 text-center text-violet-700 transition hover:bg-violet-50"
+  >
+    <Share2 size={23} strokeWidth={2.2} />
+    <span className="text-[11px] font-bold leading-tight">
+      {isFrench ? "Partager" : "Share profile"}
+    </span>
+  </button>
 
+  <button
+    type="button"
+    onClick={toggleQrCode}
+    className="flex min-h-[82px] flex-col items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50/50 px-1 py-3 text-center text-violet-700 transition hover:bg-violet-50"
+  >
+    <QrCode size={23} strokeWidth={2.2} />
+    <span className="text-[11px] font-bold leading-tight">
+      {showQrCode
+        ? isFrench
+          ? "Masquer QR"
+          : "Hide QR"
+        : isFrench
+          ? "Afficher QR"
+          : "Show QR code"}
+    </span>
+  </button>
+
+  {(profile.booking_link || profile.id) && (
+    <a
+      href={
+        profile.booking_link
+          ? normalizeUrl(profile.booking_link)
+          : `/${params.locale}/book/${profile.id}`
+      }
+      target="_blank"
+      rel="noreferrer"
+      className="flex min-h-[82px] flex-col items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50/50 px-1 py-3 text-center text-violet-700 transition hover:bg-violet-50"
+    >
+      <CalendarDays size={23} strokeWidth={2.2} />
+      <span className="text-[11px] font-bold leading-tight">
+        {isFrench ? "Rendez-vous" : "Book appointment"}
+      </span>
+    </a>
+  )}
+</div>
 {showQrCode && qrDataUrl && (
   <div className="mt-4 rounded-3xl border border-slate-100 bg-white p-5 text-center shadow-sm">
     <p className="mb-4 font-bold text-slate-900">
@@ -460,17 +496,158 @@ return (
 )}
 
           {profile.bio && (
-            <div className="mt-7 rounded-3xl bg-slate-50 p-5">
-              <h2 className="font-black text-slate-950">
-                {isFrench ? "À propos" : "About me"}
-              </h2>
+  <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <button
+  type="button"
+  onClick={() => setAboutOpen((current) => !current)}
+  className="flex w-full items-center gap-3 text-left"
+>
+  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-violet-50 text-violet-600">
+    <UserRound size={22} />
+  </div>
 
-              <p className="mt-3 whitespace-pre-line leading-7 text-slate-600">
-                {profile.bio}
-              </p>
-            </div>
-          )}
+  <h2 className="flex-1 text-lg font-black text-slate-950">
+    {isFrench ? "À propos" : "About Me"}
+  </h2>
 
+  <ChevronDown
+    size={21}
+    className={`text-slate-600 transition-transform duration-200 ${
+      aboutOpen ? "rotate-180" : ""
+    }`}
+  />
+</button>
+
+    {aboutOpen && (
+  <p className="mt-3 whitespace-pre-line text-justify text-[15px] leading-6 text-slate-600">
+    {profile.bio}
+  </p>
+)}
+  </div>
+)}
+
+{/* Expertise */}
+<div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+  <button
+    type="button"
+    onClick={() => setExpertiseOpen((current) => !current)}
+    className="flex w-full items-center gap-3 text-left"
+  >
+    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-violet-50 text-violet-600">
+      <Lightbulb size={22} />
+    </div>
+
+    <h2 className="flex-1 text-lg font-black text-slate-950">
+      {isFrench ? "Expertise" : "Expertise"}
+    </h2>
+
+    <ChevronDown
+      size={21}
+      className={`text-slate-600 transition-transform duration-200 ${
+        expertiseOpen ? "rotate-180" : ""
+      }`}
+    />
+  </button>
+
+  {expertiseOpen && (
+    <div className="mt-4 flex flex-wrap gap-2">
+      {[
+        "AI & Automation",
+        "Telecommunications",
+        "Submarine Cables",
+        "Energy Systems",
+        "Entrepreneurship",
+        "Business Development",
+      ].map((item) => (
+        <span
+          key={item}
+          className="rounded-full bg-violet-50 px-3 py-2 text-xs font-semibold text-violet-700"
+        >
+          {item}
+        </span>
+      ))}
+    </div>
+  )}
+</div>
+
+{/* My Journey */}
+<div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+  <button
+    type="button"
+    onClick={() => setJourneyOpen((current) => !current)}
+    className="flex w-full items-center gap-3 text-left"
+  >
+    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-violet-50 text-violet-600">
+      <ChartNoAxesColumnIncreasing size={22} />
+    </div>
+
+    <h2 className="flex-1 text-lg font-black text-slate-950">
+      {isFrench ? "Mon parcours" : "My Journey"}
+    </h2>
+
+    <ChevronDown
+      size={21}
+      className={`text-slate-600 transition-transform duration-200 ${
+        journeyOpen ? "rotate-180" : ""
+      }`}
+    />
+  </button>
+
+  {journeyOpen && (
+    <div className="mt-5 space-y-0">
+      {[
+        {
+          period: "2026 — Present",
+          title: "Founder & CEO",
+          organization: "LinkCard",
+        },
+        {
+          period: "2021 — Present",
+          title: "Operations Engineer",
+          organization: "Submarine Cable Landing Station",
+        },
+        {
+          period: "2019 — 2024",
+          title: "Entrepreneur",
+          organization: "Energy Efficiency",
+        },
+        {
+          period: "Looking Ahead",
+          title: "Building scalable technology businesses",
+          organization: "Innovation • AI • Digital Infrastructure",
+        },
+      ].map((item, index, items) => (
+        <div key={`${item.period}-${item.title}`} className="flex gap-4">
+          <div className="flex w-4 flex-col items-center">
+            <div className="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-violet-600" />
+
+            {index < items.length - 1 && (
+              <div className="min-h-14 w-px flex-1 bg-violet-200" />
+            )}
+          </div>
+
+          <div
+            className={`flex-1 ${
+              index < items.length - 1 ? "pb-5" : ""
+            }`}
+          >
+            <p className="text-xs font-bold text-violet-600">
+              {item.period}
+            </p>
+
+            <p className="mt-1 font-bold text-slate-900">
+              {item.title}
+            </p>
+
+            <p className="mt-1 text-sm leading-5 text-slate-500">
+              {item.organization}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
           {profile.address && (
   <a
     href={
@@ -500,23 +677,6 @@ return (
     </div>
   </a>
 )}
-
-          {(profile.booking_link || profile.id) && (
-            <a
-              href={
-  profile.booking_link
-    ? normalizeUrl(profile.booking_link)
-    : `/${params.locale}/book/${profile.id}`
-}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-6 block rounded-2xl bg-violet-600 px-5 py-4 text-center font-black text-white transition hover:bg-violet-700"
-            >
-              {isFrench
-                ? "Prendre rendez-vous"
-                : "Book an appointment"}
-            </a>
-          )}
 
           <div className="mt-8 text-center text-xs font-semibold text-slate-400">
             {socialLinks.length > 0 && (

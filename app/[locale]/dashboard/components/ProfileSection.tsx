@@ -16,6 +16,18 @@ export type ProfileForm = {
   company: string;
   location: string;
   bio: string;
+
+  expertise: string[];
+  journey: {
+  period: string;
+  title: string;
+  organization: string;
+}[]; 
+
+  website: string;
+  address: string;
+  mapsLink: string;
+  bookingLink: string;
   phone: string;
   whatsapp: string;
   email: string;
@@ -27,10 +39,10 @@ export type ProfileForm = {
 type ProfileSectionProps = {
   profile: ProfileForm;
   isFrench: boolean;
-  updateField: (
-    field: keyof ProfileForm,
-    value: string,
-  ) => void;
+  updateField: <K extends keyof ProfileForm>(
+  field: K,
+  value: ProfileForm[K]
+) => void;
 };
 
 export default function ProfileSection({
@@ -443,6 +455,59 @@ export default function ProfileSection({
               }
               className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-slate-950 outline-none transition focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-100"
             />
+          {/* Expertise */}
+<div className="mt-6">
+  <label className="mb-2 block text-sm font-bold text-slate-700">
+    {isFrench ? "Expertise" : "Expertise"}
+  </label>
+
+  <div className="space-y-2">
+    {profile.expertise.map((item, index) => (
+      <div key={index} className="flex items-center gap-2">
+        <input
+          type="text"
+          value={item}
+          onChange={(event) => {
+            const updatedExpertise = [...profile.expertise];
+            updatedExpertise[index] = event.target.value;
+            updateField("expertise", updatedExpertise);
+          }}
+          placeholder={
+            isFrench
+              ? "Ex. Intelligence artificielle"
+              : "e.g. AI & Automation"
+          }
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-violet-400"
+        />
+
+        <button
+          type="button"
+          onClick={() => {
+            const updatedExpertise = profile.expertise.filter(
+              (_, i) => i !== index
+            );
+            updateField("expertise", updatedExpertise);
+          }}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-red-200 text-red-500 hover:bg-red-50"
+          title={isFrench ? "Supprimer" : "Remove"}
+        >
+          ×
+        </button>
+      </div>
+    ))}
+  </div>
+
+  <button
+    type="button"
+    onClick={() =>
+      updateField("expertise", [...profile.expertise, ""])
+    }
+    className="mt-3 rounded-xl border border-violet-200 px-4 py-2 text-sm font-bold text-violet-600 hover:bg-violet-50"
+  >
+    + {isFrench ? "Ajouter une expertise" : "Add expertise"}
+  </button>
+</div>
+          
           </div>
         </div>
       </div>
