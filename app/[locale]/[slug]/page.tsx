@@ -17,9 +17,28 @@ import {
 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { FaWhatsapp } from "react-icons/fa6";
-import QRCode from "qrcode";
+import { FaWhatsapp } from "react-icons/fa6";import {
+  FaLinkedinIn,
+  FaFacebookF,
+  FaInstagram,
+  FaXTwitter,
+  FaYoutube,
+  FaTiktok,
+} from "react-icons/fa6";import QRCode from "qrcode";
 
+function getSocialIcon(platform: string) {
+  const name = platform.toLowerCase();
+
+  if (name.includes("linkedin")) return FaLinkedinIn;
+  if (name.includes("facebook")) return FaFacebookF;
+  if (name.includes("instagram")) return FaInstagram;
+  if (name === "x" || name.includes("twitter")) return FaXTwitter;
+  if (name.includes("youtube")) return FaYoutube;
+  if (name.includes("tiktok")) return FaTiktok;
+  if (name.includes("whatsapp")) return FaWhatsapp;
+
+  return Globe;
+}
 
 type PublicProfile = {
   first_name: string | null;
@@ -124,6 +143,10 @@ export default function PublicProfilePage() {
       .eq("user_id", data.id)
       .eq("is_visible", true)
       .order("sort_order", { ascending: true });
+      console.log("SOCIAL LINKS DEBUG", {
+      profileId: data.id,
+      links,
+  });
 
     setSocialLinks((links ?? []) as SocialLink[]);
   }
@@ -425,7 +448,7 @@ return (
             )}
           </div>
 
-          <div className="mt-4 grid grid-cols-4 gap-1.5">
+          <div className="mt-4 grid grid-cols-3 gap-2">
   <button
     type="button"
     onClick={saveContact}
@@ -474,10 +497,10 @@ return (
       }
       target="_blank"
       rel="noreferrer"
-      className="flex min-h-[82px] flex-col items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50/50 px-1 py-3 text-center text-violet-700 transition hover:bg-violet-50"
+      className="col-span-3 flex min-h-[56px] items-center justify-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3 font-bold text-violet-700 transition hover:bg-violet-100"
     >
-      <CalendarDays size={23} strokeWidth={2.2} />
-      <span className="text-[11px] font-bold leading-tight">
+      <CalendarDays size={20} strokeWidth={2.2} />
+      <span className="text-sm font-bold">
         {isFrench ? "Rendez-vous" : "Book appointment"}
       </span>
     </a>
@@ -688,19 +711,34 @@ return (
         : "Connect with me"}
     </h2>
 
-    <div className="mt-4 flex flex-wrap justify-center gap-3">
-      {socialLinks.map((link) => (
-        <a
-          key={link.id}
-          href={normalizeUrl(link.url)}
-          target="_blank"
-          rel="noreferrer"
-          className={`rounded-full border px-4 py-2 text-sm font-bold transition ${themeStyles.border} ${themeStyles.button}`}
+    <div className="mt-5 flex flex-wrap justify-center gap-5">
+  {socialLinks.map((link) => {
+    const SocialIcon = getSocialIcon(link.platform);
+
+    return (
+      <a
+        key={link.id}
+        href={normalizeUrl(link.url)}
+        target="_blank"
+        rel="noreferrer"
+        className="group flex min-w-[64px] flex-col items-center gap-2"
+      >
+        <div
+          className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-md ${themeStyles.border}`}
         >
+          <SocialIcon
+            size={21}
+            className={themeStyles.accent}
+          />
+        </div>
+
+        <span className={`text-xs font-semibold ${themeStyles.muted}`}>
           {link.platform}
-        </a>
-      ))}
-    </div>
+        </span>
+      </a>
+    );
+  })}
+</div>
   </div>
 )}
            <div className="mt-7 border-t border-slate-100 pt-6 text-center">
