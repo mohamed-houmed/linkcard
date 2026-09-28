@@ -507,6 +507,99 @@ export default function ProfileSection({
     + {isFrench ? "Ajouter une expertise" : "Add expertise"}
   </button>
 </div>
+
+{/* My Journey */}
+<div className="mt-6">
+  <label className="mb-3 block text-sm font-bold text-slate-700">
+    {isFrench ? "Mon parcours" : "My Journey"}
+  </label>
+
+  <div className="space-y-3">
+    {profile.journey.map((item, index) => (
+      <div
+        key={index}
+        className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+      >
+        <div className="space-y-3">
+          <input
+            type="text"
+            value={item.period}
+            onChange={(event) => {
+              const updatedJourney = [...profile.journey];
+              updatedJourney[index] = {
+                ...updatedJourney[index],
+                period: event.target.value,
+              };
+              updateField("journey", updatedJourney);
+            }}
+            placeholder={isFrench ? "Ex. 2021 - 2026" : "e.g. 2021 - 2026"}
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+          />
+
+          <input
+            type="text"
+            value={item.title}
+            onChange={(event) => {
+              const updatedJourney = [...profile.journey];
+              updatedJourney[index] = {
+                ...updatedJourney[index],
+                title: event.target.value,
+              };
+              updateField("journey", updatedJourney);
+            }}
+            placeholder={isFrench ? "Titre / Réalisation" : "Title / Achievement"}
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+          />
+
+          <input
+            type="text"
+            value={item.organization}
+            onChange={(event) => {
+              const updatedJourney = [...profile.journey];
+              updatedJourney[index] = {
+                ...updatedJourney[index],
+                organization: event.target.value,
+              };
+              updateField("journey", updatedJourney);
+            }}
+            placeholder={isFrench ? "Organisation" : "Organization"}
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
+          />
+
+          <button
+            type="button"
+            onClick={() => {
+              const updatedJourney = profile.journey.filter(
+                (_, i) => i !== index
+              );
+              updateField("journey", updatedJourney);
+            }}
+            className="text-sm font-semibold text-red-500"
+          >
+            {isFrench ? "Supprimer" : "Remove"}
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button
+    type="button"
+    onClick={() =>
+      updateField("journey", [
+        ...profile.journey,
+        {
+          period: "",
+          title: "",
+          organization: "",
+        },
+      ])
+    }
+    className="mt-3 rounded-xl border border-violet-200 px-4 py-2 text-sm font-bold text-violet-600"
+  >
+    + {isFrench ? "Ajouter une étape" : "Add journey item"}
+  </button>
+</div>
           
           </div>
         </div>

@@ -28,6 +28,14 @@ type PublicProfile = {
   company: string | null;
   location: string | null;
   bio: string | null;
+  expertise: string[] | null;
+  journey:
+  | {
+      period: string;
+      title: string;
+      organization: string;
+    }[]
+  | null;
   phone: string | null;
   whatsapp: string | null;
   email: string | null;
@@ -84,6 +92,8 @@ export default function PublicProfilePage() {
           company,
           location,
           bio,
+          expertise,
+          journey,
           phone,
           whatsapp,
           email,
@@ -527,7 +537,8 @@ return (
 )}
 
 {/* Expertise */}
-<div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+{(profile.expertise ?? []).length > 0 && (
+  <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
   <button
     type="button"
     onClick={() => setExpertiseOpen((current) => !current)}
@@ -551,14 +562,7 @@ return (
 
   {expertiseOpen && (
     <div className="mt-4 flex flex-wrap gap-2">
-      {[
-        "AI & Automation",
-        "Telecommunications",
-        "Submarine Cables",
-        "Energy Systems",
-        "Entrepreneurship",
-        "Business Development",
-      ].map((item) => (
+      {(profile.expertise ?? []).map((item) => (
         <span
           key={item}
           className="rounded-full bg-violet-50 px-3 py-2 text-xs font-semibold text-violet-700"
@@ -569,8 +573,10 @@ return (
     </div>
   )}
 </div>
+)}
 
 {/* My Journey */}
+{(profile.journey ?? []).length > 0 && (
 <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
   <button
     type="button"
@@ -593,30 +599,10 @@ return (
     />
   </button>
 
-  {journeyOpen && (
-    <div className="mt-5 space-y-0">
-      {[
-        {
-          period: "2026 — Present",
-          title: "Founder & CEO",
-          organization: "LinkCard",
-        },
-        {
-          period: "2021 — Present",
-          title: "Operations Engineer",
-          organization: "Submarine Cable Landing Station",
-        },
-        {
-          period: "2019 — 2024",
-          title: "Entrepreneur",
-          organization: "Energy Efficiency",
-        },
-        {
-          period: "Looking Ahead",
-          title: "Building scalable technology businesses",
-          organization: "Innovation • AI • Digital Infrastructure",
-        },
-      ].map((item, index, items) => (
+ {journeyOpen && (
+  <div className="mt-5 space-y-0">
+    {(profile.journey ?? []).map((item, index, items) => (
+
         <div key={`${item.period}-${item.title}`} className="flex gap-4">
           <div className="flex w-4 flex-col items-center">
             <div className="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-violet-600" />
@@ -648,6 +634,7 @@ return (
     </div>
   )}
 </div>
+)}
           {profile.address && (
   <a
     href={
