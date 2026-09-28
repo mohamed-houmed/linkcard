@@ -243,6 +243,8 @@ if (isMounted) {
         company: "",
         location: "",
         bio: "",
+        expertise: [],
+        journey: [],
         phone: "",
         whatsapp: "",
         email: user.email ?? "",
