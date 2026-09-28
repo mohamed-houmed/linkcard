@@ -537,7 +537,7 @@ return (
 )}
 
 {/* Expertise */}
-{(profile.expertise ?? []).length > 0 && (
+{(profile.expertise ?? []).some((item) => item.trim() !== "") && (
   <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
   <button
     type="button"
@@ -562,7 +562,9 @@ return (
 
   {expertiseOpen && (
     <div className="mt-4 flex flex-wrap gap-2">
-      {(profile.expertise ?? []).map((item) => (
+      {(profile.expertise ?? [])
+  .filter((item) => item.trim() !== "")
+  .map((item) => (
         <span
           key={item}
           className="rounded-full bg-violet-50 px-3 py-2 text-xs font-semibold text-violet-700"
@@ -576,7 +578,12 @@ return (
 )}
 
 {/* My Journey */}
-{(profile.journey ?? []).length > 0 && (
+{(profile.journey ?? []).some(
+  (item) =>
+    item.period?.trim() ||
+    item.title?.trim() ||
+    item.organization?.trim()
+) && (
 <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
   <button
     type="button"
@@ -601,7 +608,14 @@ return (
 
  {journeyOpen && (
   <div className="mt-5 space-y-0">
-    {(profile.journey ?? []).map((item, index, items) => (
+    {(profile.journey ?? [])
+  .filter(
+    (item) =>
+      item.period?.trim() ||
+      item.title?.trim() ||
+      item.organization?.trim()
+  )
+  .map((item, index, items) => (
 
         <div key={`${item.period}-${item.title}`} className="flex gap-4">
           <div className="flex w-4 flex-col items-center">
