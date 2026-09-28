@@ -629,47 +629,57 @@ return (
     />
   </button>
 
- {journeyOpen && (
-  <div className="mt-5 space-y-0">
+{journeyOpen && (
+  <div className="mt-5">
     {(profile.journey ?? [])
-  .filter(
-    (item) =>
-      item.period?.trim() ||
-      item.title?.trim() ||
-      item.organization?.trim()
-  )
-  .map((item, index, items) => (
-
-        <div key={`${item.period}-${item.title}`} className="flex gap-4">
-          <div className="flex w-4 flex-col items-center">
-            <div className="mt-1.5 h-3 w-3 shrink-0 rounded-full bg-violet-600" />
+      .filter(
+        (item) =>
+          item.period?.trim() ||
+          item.title?.trim() ||
+          item.organization?.trim()
+      )
+      .map((item, index, items) => (
+        <div
+          key={`${item.period}-${item.title}-${index}`}
+          className="relative flex gap-4"
+        >
+          {/* Timeline */}
+          <div className="flex w-5 shrink-0 flex-col items-center">
+            <div className="mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full border-[3px] border-violet-200 bg-violet-600 shadow-sm" />
 
             {index < items.length - 1 && (
-              <div className="min-h-14 w-px flex-1 bg-violet-200" />
+              <div className="min-h-16 w-0.5 flex-1 bg-gradient-to-b from-violet-300 to-violet-100" />
             )}
           </div>
 
+          {/* Journey information */}
           <div
-            className={`flex-1 ${
-              index < items.length - 1 ? "pb-5" : ""
+            className={`min-w-0 flex-1 ${
+              index < items.length - 1 ? "pb-6" : "pb-1"
             }`}
           >
-            <p className="text-xs font-bold text-violet-600">
-              {item.period}
-            </p>
+            {item.period?.trim() && (
+              <span className="inline-flex rounded-full bg-violet-50 px-2.5 py-1 text-[11px] font-bold text-violet-700">
+                {item.period}
+              </span>
+            )}
 
-            <p className="mt-1 font-bold text-slate-900">
-              {item.title}
-            </p>
+            {item.title?.trim() && (
+              <p className="mt-2 text-[15px] font-extrabold leading-tight text-slate-900">
+                {item.title}
+              </p>
+            )}
 
-            <p className="mt-1 text-sm leading-5 text-slate-500">
-              {item.organization}
-            </p>
+            {item.organization?.trim() && (
+              <p className="mt-1 text-sm font-medium leading-5 text-slate-500">
+                {item.organization}
+              </p>
+            )}
           </div>
         </div>
       ))}
-    </div>
-  )}
+  </div>
+)}
 </div>
 )}
           {profile.address && (
@@ -702,43 +712,48 @@ return (
   </a>
 )}
 
-          <div className="mt-8 text-center text-xs font-semibold text-slate-400">
-            {socialLinks.length > 0 && (
-  <div className="mt-7">
-    <h2 className={`text-center font-black ${themeStyles.title}`}>
-      {isFrench
-        ? "Réseaux sociaux"
-        : "Connect with me"}
-    </h2>
+          {socialLinks.length > 0 && (
+  <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="flex items-center gap-3">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-violet-50">
+        <Globe size={23} className={themeStyles.accent} />
+      </div>
 
-    <div className="mt-5 flex flex-wrap justify-center gap-5">
-  {socialLinks.map((link) => {
-    const SocialIcon = getSocialIcon(link.platform);
+      <h2 className={`text-lg font-black ${themeStyles.title}`}>
+        {isFrench ? "Réseaux sociaux" : "Social Links"}
+      </h2>
+    </div>
 
-    return (
-      <a
-        key={link.id}
-        href={normalizeUrl(link.url)}
-        target="_blank"
-        rel="noreferrer"
-        className="group flex min-w-[64px] flex-col items-center gap-2"
-      >
-        <div
-          className={`flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-md ${themeStyles.border}`}
-        >
-          <SocialIcon
-            size={21}
-            className={themeStyles.accent}
-          />
-        </div>
+    <div className="mt-4 flex flex-wrap items-start justify-center gap-6">
+      {socialLinks.map((link) => {
+        const SocialIcon = getSocialIcon(link.platform);
 
-        <span className={`text-xs font-semibold ${themeStyles.muted}`}>
-          {link.platform}
-        </span>
-      </a>
-    );
-  })}
-</div>
+        return (
+          <a
+            key={link.id}
+            href={normalizeUrl(link.url)}
+            target="_blank"
+            rel="noreferrer"
+            className="group flex min-w-[76px] flex-col items-center gap-2"
+          >
+            <div
+              className={`flex h-14 w-14 items-center justify-center rounded-full border bg-white shadow-sm transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-md ${themeStyles.border}`}
+            >
+              <SocialIcon
+                size={24}
+                className={themeStyles.accent}
+              />
+            </div>
+
+            <span
+              className={`text-xs font-bold transition-all duration-200 group-hover:text-violet-600 ${themeStyles.muted}`}
+            >
+              {link.platform}
+            </span>
+          </a>
+        );
+      })}
+    </div>
   </div>
 )}
            <div className="mt-7 border-t border-slate-100 pt-6 text-center">
@@ -763,7 +778,6 @@ return (
 </div>
           </div>
         </div>
-      </div>
     </main>
   );
 }
