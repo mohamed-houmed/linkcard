@@ -5,6 +5,7 @@ import {
   CalendarDays,
   ChevronDown,
   Globe,
+  Link,
   Mail,
   MapPin,
   Phone,
@@ -24,7 +25,9 @@ import { FaWhatsapp } from "react-icons/fa6";import {
   FaXTwitter,
   FaYoutube,
   FaTiktok,
-} from "react-icons/fa6";import QRCode from "qrcode";
+} from "react-icons/fa6";
+
+import QRCode from "qrcode";
 
 function getSocialIcon(platform: string) {
   const name = platform.toLowerCase();
@@ -95,6 +98,7 @@ export default function PublicProfilePage() {
   const [aboutOpen, setAboutOpen] = useState(true);
   const [expertiseOpen, setExpertiseOpen] = useState(true);
   const [journeyOpen, setJourneyOpen] = useState(true);
+  const [socialOpen, setSocialOpen] = useState(true);
 
   const isFrench = params.locale === "fr";
 
@@ -714,46 +718,96 @@ return (
 
           {socialLinks.length > 0 && (
   <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-    <div className="flex items-center gap-3">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-violet-50">
-        <Globe size={23} className={themeStyles.accent} />
+
+    {/* Social Links header */}
+    <button
+      type="button"
+      onClick={() => setSocialOpen((current) => !current)}
+      className="flex w-full items-center justify-between text-left"
+    >
+      <div className="flex items-center gap-3">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-violet-50">
+          <Link size={23} className="text-violet-600" />
+        </div>
+
+        <h2 className={`text-lg font-black ${themeStyles.title}`}>
+          {isFrench ? "Réseaux sociaux" : "Social Links"}
+        </h2>
       </div>
 
-      <h2 className={`text-lg font-black ${themeStyles.title}`}>
-        {isFrench ? "Réseaux sociaux" : "Social Links"}
-      </h2>
-    </div>
+      <ChevronDown
+        size={21}
+        className={`text-slate-600 transition-transform duration-200 ${
+          socialOpen ? "rotate-180" : ""
+        }`}
+      />
+    </button>
 
-    <div className="mt-4 flex flex-wrap items-start justify-center gap-6">
-      {socialLinks.map((link) => {
-        const SocialIcon = getSocialIcon(link.platform);
+    {/* Social icons */}
+    {socialOpen && (
+      <div className="mt-3 flex items-start justify-around gap-2">
+        {socialLinks.map((link) => {
+          const platform = link.platform.toLowerCase();
 
-        return (
-          <a
-            key={link.id}
-            href={normalizeUrl(link.url)}
-            target="_blank"
-            rel="noreferrer"
-            className="group flex min-w-[76px] flex-col items-center gap-2"
-          >
-            <div
-              className={`flex h-14 w-14 items-center justify-center rounded-full border bg-white shadow-sm transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-md ${themeStyles.border}`}
+          let SocialIcon: React.ElementType = Globe;
+          let iconStyle = "text-violet-600";
+          let circleStyle = "bg-white border-violet-200";
+
+          if (platform.includes("linkedin")) {
+            SocialIcon = FaLinkedinIn;
+            iconStyle = "text-white";
+            circleStyle = "bg-[#0A66C2] border-[#0A66C2]";
+          } else if (
+            platform.includes("twitter") ||
+            platform === "x" ||
+            platform.includes("x (")
+          ) {
+            SocialIcon = FaXTwitter;
+            iconStyle = "text-white";
+            circleStyle = "bg-black border-black";
+          } else if (platform.includes("instagram")) {
+            SocialIcon = FaInstagram;
+            iconStyle = "text-white";
+            circleStyle =
+              "bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 border-pink-400";
+          } else if (platform.includes("youtube")) {
+            SocialIcon = FaYoutube;
+            iconStyle = "text-white";
+            circleStyle = "bg-red-600 border-red-600";
+          } else if (platform.includes("facebook")) {
+            SocialIcon = FaFacebookF;
+            iconStyle = "text-white";
+            circleStyle = "bg-[#1877F2] border-[#1877F2]";
+          } else if (platform.includes("tiktok")) {
+            SocialIcon = FaTiktok;
+            iconStyle = "text-white";
+            circleStyle = "bg-black border-black";
+          }
+
+          return (
+            <a
+              key={link.id}
+              href={normalizeUrl(link.url)}
+              target="_blank"
+              rel="noreferrer"
+              className="group flex min-w-0 flex-1 flex-col items-center gap-2"
             >
-              <SocialIcon
-                size={24}
-                className={themeStyles.accent}
-              />
-            </div>
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-full border-2 shadow-sm transition-transform duration-200 group-hover:-translate-y-1 ${circleStyle}`}
+              >
+                <SocialIcon size={19} className={iconStyle} />
+              </div>
 
-            <span
-              className={`text-xs font-bold transition-all duration-200 group-hover:text-violet-600 ${themeStyles.muted}`}
-            >
-              {link.platform}
-            </span>
-          </a>
-        );
-      })}
-    </div>
+              <span
+                className={`max-w-[80px] truncate text-center text-[11px] font-semibold ${themeStyles.muted}`}
+              >
+                {link.platform}
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    )}
   </div>
 )}
            <div className="mt-7 border-t border-slate-100 pt-6 text-center">
