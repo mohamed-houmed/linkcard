@@ -89,7 +89,7 @@ const supabase = useMemo(
   () => createClient(),
   [],
 );
-
+const [isAdmin, setIsAdmin] = useState(false);
   const locale = params.locale ?? "en";
   const isFrench = locale === "fr";
 
@@ -100,7 +100,7 @@ const [activeSection, setActiveSection] =
   useState<DashboardSection>("dashboard");
 
   const [saved, setSaved] = useState(false);
-  const [bookingEnabled, setBookingEnabled] = useState(false);
+  const [bookingEnabled, setBookingEnabled] = useState(false);;
 
   const [profile, setProfile] = useState<ProfileForm>({
   firstName: "",
@@ -153,6 +153,9 @@ useEffect(() => {
     }
 
     setUserId(user.id);
+    setIsAdmin(
+  user.id === process.env.NEXT_PUBLIC_LINKCARD_ADMIN_USER_ID
+);
     const { data: bookingSettingsData } =
   await supabase
     .from("booking_settings")
@@ -435,6 +438,7 @@ if (isMounted) {
     <DashboardSidebar
   locale={locale}
   isFrench={isFrench}
+  isAdmin={isAdmin}
   mobileMenuOpen={mobileMenuOpen}
   closeMobileMenu={() =>
     setMobileMenuOpen(false)
@@ -818,6 +822,7 @@ if (isMounted) {
 type DashboardSidebarProps = {
   locale: string;
   isFrench: boolean;
+  isAdmin: boolean;
   mobileMenuOpen: boolean;
   closeMobileMenu: () => void;
   activeSection: DashboardSection;
@@ -829,6 +834,7 @@ type DashboardSidebarProps = {
 function DashboardSidebar({
   locale,
   isFrench,
+  isAdmin,
   mobileMenuOpen,
   closeMobileMenu,
   activeSection,
@@ -950,6 +956,18 @@ function DashboardSidebar({
 </button>
             );
           })}
+          {isAdmin && (
+  <button
+    type="button"
+    onClick={() => {
+      window.location.href = `/${locale}/admin`;
+    }}
+    className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-slate-400 hover:bg-white/5 hover:text-white"
+  >
+    <Settings size={19} />
+    {isFrench ? "Administration" : "Admin"}
+  </button>
+)}
         </nav>
 
         
