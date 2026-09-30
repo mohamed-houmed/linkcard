@@ -90,6 +90,7 @@ const supabase = useMemo(
   [],
 );
 const [isAdmin, setIsAdmin] = useState(false);
+
   const locale = params.locale ?? "en";
   const isFrench = locale === "fr";
 
@@ -153,6 +154,11 @@ useEffect(() => {
     }
 
     setUserId(user.id);
+    console.log("CURRENT USER ID:", user.id);
+console.log(
+  "ADMIN USER ID:",
+  process.env.NEXT_PUBLIC_LINKCARD_ADMIN_USER_ID
+);
     setIsAdmin(
   user.id === process.env.NEXT_PUBLIC_LINKCARD_ADMIN_USER_ID
 );
