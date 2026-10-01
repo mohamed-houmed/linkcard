@@ -22,6 +22,7 @@ import DashboardOverviewSection from "./components/DashboardOverviewSection";
 import AppointmentsSection from "./components/AppointmentsSection";
 import ProfileSection from "./components/ProfileSection";
 import Link from "next/link";
+import { hasFeature, getPlanLimits } from "@/lib/plans";
 
 import {
   useParams,
@@ -101,7 +102,13 @@ const [activeSection, setActiveSection] =
   useState<DashboardSection>("dashboard");
 
   const [saved, setSaved] = useState(false);
-  const [bookingEnabled, setBookingEnabled] = useState(false);;
+  const [bookingEnabled, setBookingEnabled] = useState(false);
+  const [userPlan, setUserPlan] = useState("free");
+  const canUseBooking = hasFeature(userPlan, "booking");
+  const canUseAppearance = hasFeature(userPlan, "customAppearance");
+  const socialLinksLimit = getPlanLimits(userPlan).socialLinks;
+  const canUseExpertise = hasFeature(userPlan, "expertise");
+  const canUseJourney = hasFeature(userPlan, "journey");
 
   const [profile, setProfile] = useState<ProfileForm>({
   firstName: "",
@@ -154,11 +161,7 @@ useEffect(() => {
     }
 
     setUserId(user.id);
-    console.log("CURRENT USER ID:", user.id);
-console.log(
-  "ADMIN USER ID:",
-  process.env.NEXT_PUBLIC_LINKCARD_ADMIN_USER_ID
-);
+  
     setIsAdmin(
   user.id === process.env.NEXT_PUBLIC_LINKCARD_ADMIN_USER_ID
 );
@@ -196,7 +199,8 @@ if (isMounted) {
         avatar_url,
         cover_url,
         expertise,
-        journey
+        journey,
+        plan
        `)
       .eq("id", user.id)
       .maybeSingle();
@@ -216,6 +220,7 @@ if (isMounted) {
     }
 
     if (data) {
+  setUserPlan(data.plan ?? "free");
   setProfileSlug(data.slug ?? "");
   setProfileTheme(
   (data.theme as Theme) ?? "violet"
@@ -445,6 +450,8 @@ if (isMounted) {
   locale={locale}
   isFrench={isFrench}
   isAdmin={isAdmin}
+  canUseBooking={canUseBooking}
+  canUseAppearance={canUseAppearance}
   mobileMenuOpen={mobileMenuOpen}
   closeMobileMenu={() =>
     setMobileMenuOpen(false)
@@ -736,10 +743,12 @@ if (isMounted) {
   )}
 {activeSection === "profile" && (
   <ProfileSection
-    profile={profile}
-    isFrench={isFrench}
-    updateField={updateField}
-  />
+  profile={profile}
+  isFrench={isFrench}
+  updateField={updateField}
+  canUseExpertise={canUseExpertise}
+  canUseJourney={canUseJourney}
+/>
 )}
 
 {activeSection === "contacts" && (
@@ -752,8 +761,9 @@ if (isMounted) {
 
 {activeSection === "social" && (
   <SocialLinksSection
-    isFrench={isFrench}
-  />
+  isFrench={isFrench}
+  socialLinksLimit={socialLinksLimit}
+/>
 )}
 {activeSection === "appointments" && (
   <AppointmentsSection
@@ -829,6 +839,8 @@ type DashboardSidebarProps = {
   locale: string;
   isFrench: boolean;
   isAdmin: boolean;
+  canUseBooking: boolean;
+  canUseAppearance: boolean;
   mobileMenuOpen: boolean;
   closeMobileMenu: () => void;
   activeSection: DashboardSection;
@@ -841,6 +853,8 @@ function DashboardSidebar({
   locale,
   isFrench,
   isAdmin,
+  canUseBooking,
+  canUseAppearance,
   mobileMenuOpen,
   closeMobileMenu,
   activeSection,
@@ -850,6 +864,7 @@ function DashboardSidebar({
   id: DashboardSection;
   label: string;
   icon: React.ElementType;
+  locked?: boolean;
 }[] = [
   {
     id: "dashboard",
@@ -883,6 +898,7 @@ function DashboardSidebar({
     ? "Rendez-vous"
     : "Appointments",
   icon: CalendarDays,
+  locked: !canUseBooking,
 },
   {
     id: "appearance",
@@ -890,6 +906,7 @@ function DashboardSidebar({
       ? "Apparence"
       : "Appearance",
     icon: Palette,
+    locked: !canUseAppearance,
   },
   {
     id: "qr",
@@ -948,9 +965,18 @@ function DashboardSidebar({
               <button
   key={item.id}
   type="button"
-  onClick={() =>
-    onSectionChange(item.id)
+  onClick={() => {
+  if (item.locked) {
+    alert(
+      isFrench
+        ? "Cette fonctionnalité nécessite le forfait Digital Plus."
+        : "This feature requires the Digital Plus plan."
+    );
+    return;
   }
+
+  onSectionChange(item.id);
+}}
   className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold transition ${
     activeSection === item.id
       ? "bg-violet-600 text-white"
@@ -958,7 +984,16 @@ function DashboardSidebar({
   }`}
 >
   <Icon size={19} />
+
+<span className="flex-1">
   {item.label}
+</span>
+
+{item.locked && (
+  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700">
+    {isFrench ? "Premium" : "Upgrade"}
+  </span>
+)}
 </button>
             );
           })}

@@ -31,6 +31,7 @@ type SocialLinkItem = {
 
 type SocialLinksSectionProps = {
   isFrench: boolean;
+  socialLinksLimit: number;
 };
 
 type SocialLinkDatabaseRow = {
@@ -53,6 +54,7 @@ const platforms: SocialPlatform[] = [
 
 export default function SocialLinksSection({
   isFrench,
+  socialLinksLimit,
 }: SocialLinksSectionProps) {
   const supabase = useMemo(() => createClient(), []);
 
@@ -144,20 +146,29 @@ export default function SocialLinksSection({
     };
   }, [isFrench, loadLinks, supabase]);
 
-  function addLink() {
-    setLinks((current) => [
-      ...current,
-      {
-        localId: crypto.randomUUID(),
-        platform: "LinkedIn",
-        url: "",
-        isVisible: true,
-      },
-    ]);
-
-    setMessage("");
-    setErrorMessage("");
+ function addLink() {
+  if (links.length >= socialLinksLimit) {
+    setErrorMessage(
+      isFrench
+        ? `Votre forfait permet jusqu'à ${socialLinksLimit} liens sociaux. Passez à Digital Plus pour en ajouter davantage.`
+        : `Your plan allows up to ${socialLinksLimit} social links. Upgrade to Digital Plus to add more.`
+    );
+    return;
   }
+
+  setLinks((current) => [
+    ...current,
+    {
+      localId: crypto.randomUUID(),
+      platform: "LinkedIn",
+      url: "",
+      isVisible: true,
+    },
+  ]);
+
+  setMessage("");
+  setErrorMessage("");
+}
 
   function updateLink(
     localId: string,
@@ -213,7 +224,14 @@ export default function SocialLinksSection({
       );
       return;
     }
-
+if (links.length > socialLinksLimit) {
+  setErrorMessage(
+    isFrench
+      ? `Votre forfait permet jusqu'à ${socialLinksLimit} liens sociaux.`
+      : `Your plan allows up to ${socialLinksLimit} social links.`
+  );
+  return;
+}
     const normalizedLinks = links.map((link) => {
       const trimmedUrl = link.url.trim();
       const normalizedUrl = /^https?:\/\//i.test(trimmedUrl)

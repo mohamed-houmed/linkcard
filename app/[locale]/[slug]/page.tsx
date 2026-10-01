@@ -129,11 +129,6 @@ export default function PublicProfilePage() {
         `)
         .eq("slug", params.slug)
         .maybeSingle();
-        console.log("PUBLIC PROFILE DEBUG", {
-        slug: params.slug,
-        data,
-        error,
-  });
 
       if (error) {
   setErrorMessage(error.message);

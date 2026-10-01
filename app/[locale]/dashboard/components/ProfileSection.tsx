@@ -39,6 +39,8 @@ export type ProfileForm = {
 type ProfileSectionProps = {
   profile: ProfileForm;
   isFrench: boolean;
+  canUseExpertise: boolean;
+  canUseJourney: boolean;
   updateField: <K extends keyof ProfileForm>(
   field: K,
   value: ProfileForm[K]
@@ -49,6 +51,8 @@ export default function ProfileSection({
   profile,
   isFrench,
   updateField,
+  canUseExpertise,
+  canUseJourney,
 }: ProfileSectionProps) {
 
   const supabase = useMemo(() => createClient(), []);
@@ -461,6 +465,16 @@ export default function ProfileSection({
     {isFrench ? "Expertise" : "Expertise"}
   </label>
 
+  {!canUseExpertise && (
+    <div className="mb-3 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3">
+      <p className="text-sm font-semibold text-violet-700">
+        {isFrench
+          ? "🔒 Disponible avec Digital Plus"
+          : "🔒 Available with Digital Plus"}
+      </p>
+    </div>
+  )}
+
   <div className="space-y-2">
     {profile.expertise.map((item, index) => (
       <div key={index} className="flex items-center gap-2">
@@ -477,11 +491,13 @@ export default function ProfileSection({
               ? "Ex. Intelligence artificielle"
               : "e.g. AI & Automation"
           }
+          disabled={!canUseExpertise}
           className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-violet-400"
         />
 
         <button
           type="button"
+          disabled={!canUseExpertise}
           onClick={() => {
             const updatedExpertise = profile.expertise.filter(
               (_, i) => i !== index
@@ -499,6 +515,7 @@ export default function ProfileSection({
 
   <button
     type="button"
+    disabled={!canUseExpertise}
     onClick={() =>
       updateField("expertise", [...profile.expertise, ""])
     }
@@ -520,10 +537,20 @@ export default function ProfileSection({
         key={index}
         className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
       >
+        {!canUseJourney && (
+  <div className="mb-3 rounded-xl border border-violet-200 bg-violet-50 px-4 py-3">
+    <p className="text-sm font-semibold text-violet-700">
+      {isFrench
+        ? "🔒 Disponible avec Digital Plus"
+        : "🔒 Available with Digital Plus"}
+    </p>
+  </div>
+)}
         <div className="space-y-3">
           <input
             type="text"
             value={item.period}
+            disabled={!canUseJourney}
             onChange={(event) => {
               const updatedJourney = [...profile.journey];
               updatedJourney[index] = {
@@ -539,6 +566,7 @@ export default function ProfileSection({
           <input
             type="text"
             value={item.title}
+            disabled={!canUseJourney}
             onChange={(event) => {
               const updatedJourney = [...profile.journey];
               updatedJourney[index] = {
@@ -554,6 +582,7 @@ export default function ProfileSection({
           <input
             type="text"
             value={item.organization}
+            disabled={!canUseJourney}
             onChange={(event) => {
               const updatedJourney = [...profile.journey];
               updatedJourney[index] = {
@@ -568,6 +597,7 @@ export default function ProfileSection({
 
           <button
             type="button"
+            disabled={!canUseJourney}
             onClick={() => {
               const updatedJourney = profile.journey.filter(
                 (_, i) => i !== index
@@ -585,6 +615,7 @@ export default function ProfileSection({
 
   <button
     type="button"
+    disabled={!canUseJourney}
     onClick={() =>
       updateField("journey", [
         ...profile.journey,
