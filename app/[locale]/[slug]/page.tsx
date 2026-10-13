@@ -487,7 +487,8 @@ return (
     </span>
   </button>
 
-  {(profile.booking_link || profile.id) && (
+  {(profile.plan === "digital_plus" || profile.plan === "nfc") &&
+  (profile.booking_link || profile.id) && (
     <a
       href={
         profile.booking_link
