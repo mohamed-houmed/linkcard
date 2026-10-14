@@ -44,6 +44,7 @@ function getSocialIcon(platform: string) {
 }
 
 type PublicProfile = {
+  plan: "digital" | "digital_plus" | "nfc" | "free" | null;
   first_name: string | null;
   last_name: string | null;
   job_title: string | null;
@@ -108,6 +109,7 @@ export default function PublicProfilePage() {
         .from("profiles")
         .select(`
           id,
+          plan,
           first_name,
           last_name,
           theme,
