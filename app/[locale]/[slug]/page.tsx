@@ -555,7 +555,9 @@ return (
 
     {aboutOpen && (
   <p className="mt-3 whitespace-pre-line text-justify text-[15px] leading-6 text-slate-600">
-    {profile.bio}
+    {profile.plan === "digital"
+  ? profile.bio.slice(0, 150) + (profile.bio.length > 150 ? "..." : "")
+  : profile.bio}
   </p>
 )}
   </div>
