@@ -562,7 +562,8 @@ return (
 )}
 
 {/* Expertise */}
-{(profile.expertise ?? []).some((item) => item.trim() !== "") && (
+{(profile.plan === "digital_plus" || profile.plan === "nfc") &&
+  (profile.expertise ?? []).some((item) => item.trim() !== "") && (
   <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
   <button
     type="button"
@@ -603,12 +604,13 @@ return (
 )}
 
 {/* My Journey */}
-{(profile.journey ?? []).some(
-  (item) =>
-    item.period?.trim() ||
-    item.title?.trim() ||
-    item.organization?.trim()
-) && (
+{(profile.plan === "digital_plus" || profile.plan === "nfc") &&
+  (profile.journey ?? []).some(
+    (item) =>
+      item.period?.trim() ||
+      item.title?.trim() ||
+      item.organization?.trim()
+  ) && (
 <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
   <button
     type="button"
