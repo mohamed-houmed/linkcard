@@ -131,6 +131,43 @@ const [activeSection, setActiveSection] =
   bookingLink: "",
 });
 const [userId, setUserId] = useState("");
+const [subscription, setSubscription] = useState<{
+  plan: string;
+  status: string;
+  trialEndsAt: string | null;
+  subscriptionEndsAt: string | null;
+}>({
+  plan: "digital",
+  status: "inactive",
+  trialEndsAt: null,
+  subscriptionEndsAt: null,
+});
+const isSubscriptionValid = (() => {
+  const now = Date.now();
+
+  if (subscription.status === "trialing") {
+    return (
+      subscription.trialEndsAt !== null &&
+      new Date(subscription.trialEndsAt).getTime() > now
+    );
+  }
+
+  if (subscription.status === "active") {
+    if (
+      subscription.plan === "nfc" &&
+      subscription.subscriptionEndsAt === null
+    ) {
+      return true;
+    }
+
+    return (
+      subscription.subscriptionEndsAt !== null &&
+      new Date(subscription.subscriptionEndsAt).getTime() > now
+    );
+  }
+
+  return false;
+})();
 const [profileSlug, setProfileSlug] = useState("");
 const [profileTheme, setProfileTheme] =
   useState<Theme>("violet");
@@ -200,7 +237,11 @@ if (isMounted) {
         cover_url,
         expertise,
         journey,
-        plan
+        plan,
+        subscription_status,
+        trial_started_at,
+        trial_ends_at,
+        subscription_ends_at
        `)
       .eq("id", user.id)
       .maybeSingle();
@@ -225,7 +266,12 @@ if (isMounted) {
   setProfileTheme(
   (data.theme as Theme) ?? "violet"
 );
-
+setSubscription({
+  plan: data.plan ?? "digital",
+  status: data.subscription_status ?? "inactive",
+  trialEndsAt: data.trial_ends_at ?? null,
+  subscriptionEndsAt: data.subscription_ends_at ?? null,
+});
   setProfile({
         firstName: data.first_name ?? "",
         lastName: data.last_name ?? "",
@@ -536,6 +582,21 @@ if (isMounted) {
 
           <div className="mx-auto grid max-w-[1500px] gap-8 p-5 lg:grid-cols-[minmax(0,1fr)_410px] lg:p-8">
             <section className="space-y-6">
+              {!isLoadingProfile && !isSubscriptionValid && (
+  <div className="rounded-xl border border-amber-300 bg-amber-50 p-5">
+    <h3 className="font-bold text-amber-900">
+      {isFrench
+        ? "Votre abonnement est inactif ou expiré"
+        : "Your subscription is inactive or expired"}
+    </h3>
+
+    <p className="mt-2 text-sm text-amber-800">
+      {isFrench
+        ? "Votre période d'essai ou votre abonnement a expiré. Veuillez renouveler votre abonnement pour continuer à utiliser les fonctionnalités payantes."
+        : "Your free trial or subscription has expired. Please renew your subscription to continue using paid features."}
+    </p>
+  </div>
+)}
                 {activeSection === "dashboard" && (
                     <>
               <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
