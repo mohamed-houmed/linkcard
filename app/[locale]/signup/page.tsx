@@ -36,7 +36,7 @@ type SignupFormErrors = Partial<
   Record<keyof SignupFormData, string>
 >;
 
-type SelectedPlan = "free" | "standard";
+type SelectedPlan = "digital" | "digital_plus" | "nfc";
 
 function SignupContent() {
   const params = useParams<{ locale: string }>();
@@ -51,9 +51,11 @@ function SignupContent() {
   const requestedPlan = searchParams.get("plan");
 
   const selectedPlan: SelectedPlan =
-    requestedPlan === "standard"
-      ? "standard"
-      : "free";
+  requestedPlan === "digital_plus"
+    ? "digital_plus"
+    : requestedPlan === "nfc"
+      ? "nfc"
+      : "digital";
 
   const [formData, setFormData] =
     useState<SignupFormData>({
@@ -79,30 +81,40 @@ function SignupContent() {
     useState(false);
 
   const planName =
-  selectedPlan === "standard"
-    ? "Digital Plus"
-    : "Digital";
+  selectedPlan === "nfc"
+    ? "NFC"
+    : selectedPlan === "digital_plus"
+      ? "Digital Plus"
+      : "Digital";
 
   const planPrice =
-  selectedPlan === "standard"
+  selectedPlan === "nfc"
     ? isFrench
-      ? "2 999 FDJ / mois"
-      : "2,999 FDJ / month"
-    : isFrench
-      ? "999 FDJ / mois"
-      : "999 FDJ / month";
+      ? "7 999 FDJ (paiement unique)"
+      : "7,999 FDJ (one-time)"
+    : selectedPlan === "digital_plus"
+      ? isFrench
+        ? "1 099 FDJ / mois"
+        : "1,099 FDJ / month"
+      : isFrench
+        ? "599 FDJ / mois"
+        : "599 FDJ / month";
 
   const planDescription =
-  selectedPlan === "standard"
+  selectedPlan === "nfc"
     ? isFrench
-      ? "Un profil professionnel complet avec des fonctionnalités avancées."
-      : "A complete professional profile with advanced features."
-    : isFrench
-      ? "Votre profil professionnel numérique essentiel, prêt à être partagé partout."
-      : "Your essential professional digital profile, ready to share anywhere.";
+      ? "Votre carte NFC physique connectée à un profil professionnel numérique complet."
+      : "Your physical NFC card connected to a complete professional digital profile."
+    : selectedPlan === "digital_plus"
+      ? isFrench
+        ? "Un profil professionnel complet avec des fonctionnalités avancées."
+        : "A complete professional profile with advanced features."
+      : isFrench
+        ? "Votre profil professionnel numérique essentiel, prêt à être partagé partout."
+        : "Your essential professional digital profile, ready to share anywhere.";
 
   const planFeatures =
-  selectedPlan === "standard"
+  selectedPlan === "digital_plus" || selectedPlan === "nfc"
     ? isFrench
       ? [
           "Tout ce qui est inclus dans Digital",
@@ -143,6 +155,16 @@ function SignupContent() {
           "Social media links",
           "Personal QR code",
         ];
+      
+      const displayedPlanFeatures =
+  selectedPlan === "nfc"
+    ? [
+        ...planFeatures,
+        isFrench
+          ? "Carte NFC physique incluse"
+          : "Physical NFC card included",
+      ]
+    : planFeatures;
   function updateField(
     field: keyof SignupFormData,
     value: string,
@@ -235,7 +257,8 @@ function SignupContent() {
         full_name: formData.fullName.trim(),
         first_name: firstName,
         last_name: lastName,
-        plan: selectedPlan,
+        plan: "digital",
+        requested_plan: selectedPlan,
       },
     },
   });
@@ -395,7 +418,7 @@ function SignupContent() {
             <div className="my-8 border-t border-white/15" />
 
             <ul className="space-y-4">
-              {planFeatures.map((feature) => (
+              {displayedPlanFeatures.map((feature) => (
                 <li
                   key={feature}
                   className="flex items-start gap-3 text-sm text-violet-50"
@@ -627,7 +650,11 @@ function SignupContent() {
                     ? "Créer mon compte LinkCard"
                     : "Create my LinkCard account"}
               </button>
-
+              <p className="mt-3 text-center text-xs leading-5 text-slate-500">
+  {isFrench
+    ? "La création du compte est gratuite. Votre formule payante sera activée après confirmation du paiement."
+    : "Account creation is free. Your selected paid plan will be activated after payment confirmation."}
+</p>
               <p className="text-center text-sm text-slate-500">
                 {isFrench
                   ? "Vous avez déjà un compte ?"
