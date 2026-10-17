@@ -45,6 +45,9 @@ function getSocialIcon(platform: string) {
 
 type PublicProfile = {
   plan: "digital" | "digital_plus" | "nfc" | "free" | null;
+  subscription_status: string | null;
+  trial_ends_at: string | null;
+  subscription_ends_at: string | null;
   first_name: string | null;
   last_name: string | null;
   job_title: string | null;
@@ -102,7 +105,34 @@ export default function PublicProfilePage() {
   const [socialOpen, setSocialOpen] = useState(true);
 
   const isFrench = params.locale === "fr";
+const isSubscriptionValid = (() => {
+  if (!profile) return false;
 
+  const now = Date.now();
+
+  if (profile.subscription_status === "trialing") {
+    return (
+      profile.trial_ends_at !== null &&
+      new Date(profile.trial_ends_at).getTime() > now
+    );
+  }
+
+  if (profile.subscription_status === "active") {
+    if (
+      profile.plan === "nfc" &&
+      profile.subscription_ends_at === null
+    ) {
+      return true;
+    }
+
+    return (
+      profile.subscription_ends_at !== null &&
+      new Date(profile.subscription_ends_at).getTime() > now
+    );
+  }
+
+  return false;
+})();
   useEffect(() => {
     async function loadProfile() {
       const { data, error } = await supabase
@@ -110,6 +140,9 @@ export default function PublicProfilePage() {
         .select(`
           id,
           plan,
+          subscription_status,
+          trial_ends_at,
+          subscription_ends_at,
           first_name,
           last_name,
           theme,
@@ -489,7 +522,8 @@ return (
     </span>
   </button>
 
-  {(profile.plan === "digital_plus" || profile.plan === "nfc") &&
+  {isSubscriptionValid &&
+  (profile.plan === "digital_plus" || profile.plan === "nfc") &&
   (profile.booking_link || profile.id) && (
     <a
       href={
@@ -530,7 +564,9 @@ return (
   </div>
 )}
 
-          {profile.bio && (
+          {isSubscriptionValid &&
+  (profile.plan === "digital_plus" || profile.plan === "nfc") &&
+  profile.bio && (
   <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
     <button
   type="button"
@@ -555,16 +591,15 @@ return (
 
     {aboutOpen && (
   <p className="mt-3 whitespace-pre-line text-justify text-[15px] leading-6 text-slate-600">
-    {profile.plan === "digital"
-  ? profile.bio.slice(0, 150) + (profile.bio.length > 150 ? "..." : "")
-  : profile.bio}
+    {profile.bio}
   </p>
 )}
   </div>
 )}
 
 {/* Expertise */}
-{(profile.plan === "digital_plus" || profile.plan === "nfc") &&
+{isSubscriptionValid &&
+  (profile.plan === "digital_plus" || profile.plan === "nfc") &&
   (profile.expertise ?? []).some((item) => item.trim() !== "") && (
   <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
   <button
@@ -606,7 +641,8 @@ return (
 )}
 
 {/* My Journey */}
-{(profile.plan === "digital_plus" || profile.plan === "nfc") &&
+{isSubscriptionValid &&
+  (profile.plan === "digital_plus" || profile.plan === "nfc") &&
   (profile.journey ?? []).some(
     (item) =>
       item.period?.trim() ||
