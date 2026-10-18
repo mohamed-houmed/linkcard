@@ -5,6 +5,7 @@ import DeleteUserButton from "./DeleteUserButton";
 import ChangePlanSelect from "./ChangePlanSelect";
 import RenewSubscriptionButton from "./RenewSubscriptionButton";
 import DeactivateSubscriptionButton from "./DeactivateSubscriptionButton";
+import ActivateSubscriptionButton from "./ActivateSubscriptionButton";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -121,6 +122,12 @@ if (profilesError) {
     )}
     {account.id !== process.env.LINKCARD_ADMIN_USER_ID && (
   <DeactivateSubscriptionButton
+    userId={account.id}
+    subscriptionStatus={profile.subscription_status ?? "inactive"}
+  />
+)}
+{account.id !== process.env.LINKCARD_ADMIN_USER_ID && (
+  <ActivateSubscriptionButton
     userId={account.id}
     subscriptionStatus={profile.subscription_status ?? "inactive"}
   />
