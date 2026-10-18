@@ -45,7 +45,17 @@ export default async function AdminPage() {
   }
 const { data: profiles, error: profilesError } = await supabaseAdmin
   .from("profiles")
-  .select("id, first_name, last_name, slug, plan, is_published");
+  .select(`
+    id,
+    first_name,
+    last_name,
+    slug,
+    plan,
+    is_published,
+    subscription_status,
+    trial_ends_at,
+    subscription_ends_at
+  `);
 
 if (profilesError) {
   throw new Error(`Unable to load profiles: ${profilesError.message}`);
@@ -115,9 +125,39 @@ if (profilesError) {
   <p className="mt-2 text-[11px] text-slate-400">
     {account.id}
   </p>
-  <p className="text-[11px] text-blue-500">
-  Slug: {profile?.slug ?? "NO SLUG"}
-</p>
+  {profile && (
+  <div className="mt-2 space-y-1 text-xs">
+    <p className="text-slate-600">
+      Subscription:{" "}
+      <span className="font-semibold">
+        {profile.subscription_status === "active" &&
+        (profile.plan === "nfc" ||
+          (profile.subscription_ends_at &&
+            new Date(profile.subscription_ends_at) > new Date()))
+          ? "Active"
+          : profile.subscription_status === "trialing" &&
+              profile.trial_ends_at &&
+              new Date(profile.trial_ends_at) > new Date()
+            ? "Trial"
+            : "Inactive / Expired"}
+      </span>
+    </p>
+
+    <p className="text-slate-500">
+      Expires:{" "}
+      {profile.plan === "nfc" &&
+      profile.subscription_status === "active"
+        ? "Lifetime"
+        : profile.subscription_status === "trialing"
+          ? profile.trial_ends_at
+            ? new Date(profile.trial_ends_at).toLocaleDateString("en-GB")
+            : "Not set"
+          : profile.subscription_ends_at
+            ? new Date(profile.subscription_ends_at).toLocaleDateString("en-GB")
+            : "Not set"}
+    </p>
+  </div>
+)}
 </div>
 
                 {account.id === process.env.LINKCARD_ADMIN_USER_ID ? (
