@@ -156,6 +156,77 @@ const monthlyRecurringRevenue = customerProfiles.reduce(
   },
   0
 );
+// ============================================
+// SUBSCRIPTIONS EXPIRING WITHIN 7 DAYS
+// ============================================
+
+const sevenDaysFromNow = new Date(now);
+
+sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+
+const expiringSoon = customerProfiles
+  .filter((profile) => {
+    // NFC subscriptions have lifetime access.
+    if (profile.plan === "nfc") {
+      return false;
+    }
+
+    // Include active paid subscriptions and valid trials.
+    if (
+      profile.subscription_status !== "active" &&
+      profile.subscription_status !== "trialing"
+    ) {
+      return false;
+    }
+
+    const expirationDate =
+      profile.subscription_status === "trialing"
+        ? profile.trial_ends_at
+        : profile.subscription_ends_at;
+
+    if (!expirationDate) {
+      return false;
+    }
+
+    const expiry = new Date(expirationDate);
+
+    return expiry > now && expiry <= sevenDaysFromNow;
+  })
+  .map((profile) => {
+    const account = users.find(
+      (account) => account.id === profile.id
+    );
+
+    const expirationDate =
+      profile.subscription_status === "trialing"
+        ? profile.trial_ends_at
+        : profile.subscription_ends_at;
+
+    const expiry = new Date(expirationDate!);
+
+    const daysRemaining = Math.ceil(
+      (expiry.getTime() - now.getTime()) /
+        (1000 * 60 * 60 * 24)
+    );
+
+    return {
+      id: profile.id,
+      name:
+        `${profile.first_name ?? ""} ${profile.last_name ?? ""}`.trim() ||
+        "Unnamed customer",
+      email: account?.email ?? "No email",
+      plan: profile.plan,
+      status: profile.subscription_status,
+      expiresAt: expiry,
+      daysRemaining,
+    };
+  })
+  .sort(
+    (a, b) =>
+      a.expiresAt.getTime() - b.expiresAt.getTime()
+  );
+
+const expiringSoonCount = expiringSoon.length;
   return (
     <main className="min-h-screen bg-slate-50 p-8">
       <div className="mx-auto max-w-6xl">
@@ -172,6 +243,76 @@ const monthlyRecurringRevenue = customerProfiles.reduce(
 ============================================ */}
 
 <div className="mt-10 space-y-8">
+  {/* SUBSCRIPTIONS EXPIRING SOON */}
+<section>
+  <div className="mb-4 flex items-center justify-between">
+    <h2 className="text-lg font-bold text-slate-900">
+      ⚠️ Subscriptions Expiring Soon
+    </h2>
+
+    <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-semibold text-amber-800">
+      {expiringSoonCount} customers
+    </span>
+  </div>
+
+  <div className="overflow-x-auto rounded-2xl border border-amber-200 bg-white shadow-sm">
+    {expiringSoon.length === 0 ? (
+      <div className="p-6 text-center text-sm text-slate-500">
+        No subscriptions expiring within the next 7 days.
+      </div>
+    ) : (
+      <table className="w-full text-left text-sm">
+        <thead className="bg-amber-50 text-slate-700">
+          <tr>
+            <th className="px-5 py-4">Customer</th>
+            <th className="px-5 py-4">Plan</th>
+            <th className="px-5 py-4">Type</th>
+            <th className="px-5 py-4">Expiration</th>
+            <th className="px-5 py-4">Remaining</th>
+          </tr>
+        </thead>
+
+        <tbody className="divide-y divide-slate-100">
+          {expiringSoon.map((customer) => (
+            <tr key={customer.id}>
+              <td className="px-5 py-4">
+                <p className="font-semibold text-slate-900">
+                  {customer.name}
+                </p>
+                <p className="text-xs text-slate-500">
+                  {customer.email}
+                </p>
+              </td>
+
+              <td className="px-5 py-4">
+                {customer.plan === "digital_plus"
+                  ? "Digital Plus"
+                  : "Digital"}
+              </td>
+
+              <td className="px-5 py-4">
+                {customer.status === "trialing"
+                  ? "Free Trial"
+                  : "Paid Subscription"}
+              </td>
+
+              <td className="px-5 py-4">
+                {customer.expiresAt.toLocaleDateString("en-GB")}
+              </td>
+
+              <td className="px-5 py-4">
+                <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+                  {customer.daysRemaining} day
+                  {customer.daysRemaining !== 1 ? "s" : ""}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+</section>
 
   {/* OVERVIEW */}
   <section>
