@@ -38,11 +38,28 @@ export async function POST(request: Request) {
       );
     }
 
-    // Service-role client performs the database update
-    const { error: updateError } = await supabaseAdmin
-      .from("profiles")
-      .update({ plan })
-      .eq("id", userId);
+    // Only the authenticated LinkCard administrator reaches this code.
+
+const now = new Date();
+
+const subscriptionEnd = new Date(now);
+
+subscriptionEnd.setUTCMonth(subscriptionEnd.getUTCMonth() + 1);
+
+const subscriptionUpdate = {
+  plan,
+  subscription_status: "active",
+  trial_started_at: null,
+  trial_ends_at: null,
+  subscription_ends_at:
+    plan === "nfc" ? null : subscriptionEnd.toISOString(),
+};
+
+// Service-role client performs the database update.
+const { error: updateError } = await supabaseAdmin
+  .from("profiles")
+  .update(subscriptionUpdate)
+  .eq("id", userId);
 
     if (updateError) {
       return NextResponse.json(
