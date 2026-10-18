@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import DeleteUserButton from "./DeleteUserButton";
 import ChangePlanSelect from "./ChangePlanSelect";
+import RenewSubscriptionButton from "./RenewSubscriptionButton";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -105,10 +106,19 @@ if (profilesError) {
 
   <div className="mt-2 flex flex-wrap items-center gap-2">
     {profile && (
-  <ChangePlanSelect
-    userId={account.id}
-    currentPlan={profile.plan ?? "digital"}
-  />
+  <>
+    <ChangePlanSelect
+      userId={account.id}
+      currentPlan={profile.plan ?? "digital"}
+    />
+
+    {account.id !== process.env.LINKCARD_ADMIN_USER_ID && (
+      <RenewSubscriptionButton
+        userId={account.id}
+        plan={profile.plan ?? "digital"}
+      />
+    )}
+  </>
 )}
 
     <span
