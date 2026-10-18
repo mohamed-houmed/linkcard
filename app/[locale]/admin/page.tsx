@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import DeleteUserButton from "./DeleteUserButton";
 import ChangePlanSelect from "./ChangePlanSelect";
 import RenewSubscriptionButton from "./RenewSubscriptionButton";
+import DeactivateSubscriptionButton from "./DeactivateSubscriptionButton";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -118,6 +119,12 @@ if (profilesError) {
         plan={profile.plan ?? "digital"}
       />
     )}
+    {account.id !== process.env.LINKCARD_ADMIN_USER_ID && (
+  <DeactivateSubscriptionButton
+    userId={account.id}
+    subscriptionStatus={profile.subscription_status ?? "inactive"}
+  />
+)}
   </>
 )}
 
