@@ -63,6 +63,99 @@ const { data: profiles, error: profilesError } = await supabaseAdmin
 if (profilesError) {
   throw new Error(`Unable to load profiles: ${profilesError.message}`);
 }
+// ============================================
+// LINKCARD SUBSCRIPTION STATISTICS
+// ============================================
+
+const now = new Date();
+
+const customerProfiles = (profiles ?? []).filter(
+  (profile) => profile.id !== process.env.LINKCARD_ADMIN_USER_ID
+);
+
+const totalCustomers = users.filter(
+  (account) => account.id !== process.env.LINKCARD_ADMIN_USER_ID
+).length;
+
+const activeSubscriptions = customerProfiles.filter(
+  (profile) =>
+    profile.subscription_status === "active" &&
+    (
+      profile.plan === "nfc" ||
+      (
+        profile.subscription_ends_at &&
+        new Date(profile.subscription_ends_at) > now
+      )
+    )
+).length;
+
+const trialSubscriptions = customerProfiles.filter(
+  (profile) =>
+    profile.subscription_status === "trialing" &&
+    profile.trial_ends_at &&
+    new Date(profile.trial_ends_at) > now
+).length;
+
+const inactiveSubscriptions = customerProfiles.filter(
+  (profile) => profile.subscription_status === "inactive"
+).length;
+
+const expiredSubscriptions = customerProfiles.filter(
+  (profile) =>
+    (
+      profile.subscription_status === "active" &&
+      profile.plan !== "nfc" &&
+      (
+        !profile.subscription_ends_at ||
+        new Date(profile.subscription_ends_at) <= now
+      )
+    ) ||
+    (
+      profile.subscription_status === "trialing" &&
+      (
+        !profile.trial_ends_at ||
+        new Date(profile.trial_ends_at) <= now
+      )
+    )
+).length;
+
+const digitalCustomers = customerProfiles.filter(
+  (profile) => profile.plan === "digital"
+).length;
+
+const digitalPlusCustomers = customerProfiles.filter(
+  (profile) => profile.plan === "digital_plus"
+).length;
+
+const nfcCustomers = customerProfiles.filter(
+  (profile) => profile.plan === "nfc"
+).length;
+
+// Estimated MRR based on active monthly subscriptions.
+// This does not represent verified payment revenue.
+
+const monthlyRecurringRevenue = customerProfiles.reduce(
+  (total, profile) => {
+    if (
+      profile.subscription_status !== "active" ||
+      !profile.subscription_ends_at ||
+      new Date(profile.subscription_ends_at) <= now
+    ) {
+      return total;
+    }
+
+    if (profile.plan === "digital") {
+      return total + 599;
+    }
+
+    if (profile.plan === "digital_plus") {
+      return total + 1099;
+    }
+
+    return total;
+  },
+  0
+);
   return (
     <main className="min-h-screen bg-slate-50 p-8">
       <div className="mx-auto max-w-6xl">
@@ -74,7 +167,154 @@ if (profilesError) {
         <p className="mt-2 text-slate-600">
           Manage LinkCard accounts
         </p>
+        {/* ============================================
+    LINKCARD ADMIN STATISTICS DASHBOARD
+============================================ */}
 
+<div className="mt-10 space-y-8">
+
+  {/* OVERVIEW */}
+  <section>
+    <h2 className="mb-4 text-lg font-bold text-slate-900">
+      Business Overview
+    </h2>
+
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <p className="text-sm font-medium text-slate-500">
+          Total Customers
+        </p>
+        <p className="mt-3 text-3xl font-bold text-slate-900">
+          {totalCustomers}
+        </p>
+        <p className="mt-2 text-xs text-slate-400">
+          Registered customer accounts
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-green-200 bg-green-50 p-6 shadow-sm">
+        <p className="text-sm font-medium text-green-700">
+          Active Subscriptions
+        </p>
+        <p className="mt-3 text-3xl font-bold text-green-800">
+          {activeSubscriptions}
+        </p>
+        <p className="mt-2 text-xs text-green-600">
+          Currently active customers
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-violet-200 bg-violet-50 p-6 shadow-sm">
+        <p className="text-sm font-medium text-violet-700">
+          Estimated Monthly Revenue
+        </p>
+        <p className="mt-3 text-3xl font-bold text-violet-800">
+          {monthlyRecurringRevenue.toLocaleString("en-US")} FDJ
+        </p>
+        <p className="mt-2 text-xs text-violet-600">
+          Estimated MRR — not verified payments
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  {/* SUBSCRIPTION STATUS */}
+  <section>
+    <h2 className="mb-4 text-lg font-bold text-slate-900">
+      Subscription Status
+    </h2>
+
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+      <div className="rounded-2xl border border-blue-200 bg-blue-50 p-6 shadow-sm">
+        <p className="text-sm font-medium text-blue-700">
+          Free Trials
+        </p>
+        <p className="mt-3 text-3xl font-bold text-blue-800">
+          {trialSubscriptions}
+        </p>
+        <p className="mt-2 text-xs text-blue-600">
+          Trials currently in progress
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <p className="text-sm font-medium text-slate-500">
+          Inactive Subscriptions
+        </p>
+        <p className="mt-3 text-3xl font-bold text-slate-800">
+          {inactiveSubscriptions}
+        </p>
+        <p className="mt-2 text-xs text-slate-400">
+          Manually deactivated subscriptions
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-6 shadow-sm">
+        <p className="text-sm font-medium text-red-700">
+          Expired Subscriptions
+        </p>
+        <p className="mt-3 text-3xl font-bold text-red-800">
+          {expiredSubscriptions}
+        </p>
+        <p className="mt-2 text-xs text-red-600">
+          Subscriptions requiring attention
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  {/* PLAN DISTRIBUTION */}
+  <section>
+    <h2 className="mb-4 text-lg font-bold text-slate-900">
+      Plan Distribution
+    </h2>
+
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <p className="text-sm font-medium text-slate-500">
+          Digital
+        </p>
+        <p className="mt-3 text-3xl font-bold text-slate-900">
+          {digitalCustomers}
+        </p>
+        <p className="mt-2 text-xs text-slate-400">
+          599 FDJ / month
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-violet-200 bg-violet-50 p-6 shadow-sm">
+        <p className="text-sm font-medium text-violet-700">
+          Digital Plus
+        </p>
+        <p className="mt-3 text-3xl font-bold text-violet-800">
+          {digitalPlusCustomers}
+        </p>
+        <p className="mt-2 text-xs text-violet-600">
+          1,099 FDJ / month
+        </p>
+      </div>
+
+      <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 shadow-sm">
+        <p className="text-sm font-medium text-amber-700">
+          NFC
+        </p>
+        <p className="mt-3 text-3xl font-bold text-amber-800">
+          {nfcCustomers}
+        </p>
+        <p className="mt-2 text-xs text-amber-600">
+          7,999 FDJ — lifetime access
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+</div>
         <div className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
           <div className="border-b border-slate-200 p-5">
