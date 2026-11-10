@@ -511,13 +511,9 @@ let reservation = await reserveNotification(
 
 // If a notification already exists, attempt to recover it
 // only if its previous status is "failed".
-if (!reservation.reserved && reservation.reason === "duplicate") {
-  reservation = await retryFailedNotification(
-    profile.id,
-    reminderType,
-    expiry.toISOString()
-  );
-}
+// Automatic retries are temporarily disabled.
+// Failed notifications require manual investigation
+// to avoid accidentally sending duplicate emails.
 
 // If the reminder already exists, do not create another.
 if (!reservation.reserved) {
