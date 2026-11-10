@@ -553,6 +553,8 @@ if (emailSent) {
   console.log("Subscription reminder was not submitted successfully.");
 }
 
+} // End of customer-processing loop
+
 // Check for potentially interrupted notification attempts.
 const staleNotifications = await findStalePendingNotifications();
 // Prepare a sample reminder without sending an email.
@@ -581,5 +583,4 @@ return NextResponse.json({
   stalePendingNotifications: staleNotifications.length,
   requiresInvestigation: staleNotifications.length > 0,
 });
-}
 }
